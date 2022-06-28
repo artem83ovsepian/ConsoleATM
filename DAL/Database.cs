@@ -44,14 +44,14 @@ namespace DAL
 
         public string GetApplicationProperty(string propertyName)
         {
-            XmlNode? applicationProperties = db.SelectSingleNode(appNodePathXML);
+            var applicationProperties = db.SelectSingleNode(appNodePathXML);
 
             return applicationProperties.Attributes?.GetNamedItem(propertyName)?.Value!;
         }
 
         public void SetActualUsersCount(int incrementValue)
         {
-            XmlNode applicationProperties = db.SelectSingleNode(appNodePathXML);
+            var applicationProperties = db.SelectSingleNode(appNodePathXML);
 
             applicationProperties.Attributes["actualUsersCount"].Value = (int.Parse(GetApplicationProperty("actualUsersCount")) + incrementValue).ToString();
 
@@ -60,31 +60,21 @@ namespace DAL
 
         public ApplicationUserData GetAtmUser(string userName, string password)
         {
-            XmlNodeList userTable = db.SelectNodes(userNodePathXML);
+            var userTable = db.SelectNodes(userNodePathXML);
 
-            ApplicationUserData atmApplicationUserData = new();
+            var atmApplicationUserData = new ApplicationUserData();
 
             foreach (XmlNode user in userTable)
             {
-                int dbUserId = int.Parse(user.Attributes?.GetNamedItem("id")?.Value!);
-
-                int dbUserIsActive = int.Parse(user.Attributes?.GetNamedItem("isActive")?.Value!);
-
-                string dbUserName = user.Attributes?.GetNamedItem("name")?.Value!;
-
-                string dbUserPassword = user.Attributes?.GetNamedItem("password")?.Value!;
-
-                string dbUserFulllName = user.Attributes?.GetNamedItem("fullName")?.Value!;
-
-                if (dbUserName == userName && dbUserPassword == password)
+                if ((user.Attributes?.GetNamedItem("name")?.Value! == userName) && (user.Attributes?.GetNamedItem("password")?.Value! == password))
                 {
-                    atmApplicationUserData.Name = dbUserName;
+                    atmApplicationUserData.Name = user.Attributes?.GetNamedItem("name")?.Value!;
 
-                    atmApplicationUserData.Id = dbUserId;
+                    atmApplicationUserData.Id = int.Parse(user.Attributes?.GetNamedItem("id")?.Value!);
 
-                    atmApplicationUserData.IsActive = dbUserIsActive;
+                    atmApplicationUserData.IsActive = int.Parse(user.Attributes?.GetNamedItem("isActive")?.Value!);
 
-                    atmApplicationUserData.FullName = dbUserFulllName;
+                    atmApplicationUserData.FullName = user.Attributes?.GetNamedItem("fullName")?.Value!;
 
                     break;
                 }
@@ -95,27 +85,21 @@ namespace DAL
 
         public AccountData GetAtmAccount(int userId)
         {
-            XmlNodeList accountTable = db.SelectNodes(accountNodePathXML);            
+            var accountTable = db.SelectNodes(accountNodePathXML);            
 
             foreach (XmlNode account in accountTable)
             {
-                int accountUserId = int.Parse(account.Attributes?.GetNamedItem("userId")?.Value!);
-
-                int accountIsActive = int.Parse(account.Attributes?.GetNamedItem("isActive")?.Value!);
-
-                int accountId = int.Parse(account.Attributes?.GetNamedItem("id")?.Value!);
-
-                decimal accountBalance = decimal.Parse(account.Attributes?.GetNamedItem("balance")?.Value!);
-
-                if (accountUserId == userId && accountIsActive == 1)
+                if ((int.Parse(account.Attributes?.GetNamedItem("userId")?.Value!) == userId) && (int.Parse(account.Attributes?.GetNamedItem("isActive")?.Value!) == 1))
                 {
-                    atmAccountData.Id = accountId;
+                    atmAccountData.Id = int.Parse(account.Attributes?.GetNamedItem("id")?.Value!);
 
-                    atmAccountData.UserId = accountUserId;
+                    atmAccountData.UserId = int.Parse(account.Attributes?.GetNamedItem("userId")?.Value!);
 
-                    atmAccountData.Balance = accountBalance;
+                    atmAccountData.Balance = decimal.Parse(account.Attributes?.GetNamedItem("balance")?.Value!);
 
-                    atmAccountData.IsActive = accountIsActive;
+                    atmAccountData.IsActive = int.Parse(account.Attributes?.GetNamedItem("isActive")?.Value!);
+
+                    atmAccountData.OverDraft = decimal.Parse(account.Attributes?.GetNamedItem("overdraft")?.Value!);
 
                     break;
                 }
@@ -126,11 +110,11 @@ namespace DAL
 
         public void SaveAtmAccount(int accountId, decimal balance)
         {
-            XmlNodeList accountTable = db.SelectNodes(accountNodePathXML);
+            var accountTable = db.SelectNodes(accountNodePathXML);
 
             foreach (XmlNode account in accountTable)
             {
-                int Id = int.Parse(account.Attributes?.GetNamedItem("id")?.Value!);
+                var Id = int.Parse(account.Attributes?.GetNamedItem("id")?.Value!);
 
                 if (Id == accountId)
                 {
@@ -143,69 +127,67 @@ namespace DAL
 
         public void SaveTransactionHistory (int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy)
         {
-            XmlNodeList? transactionHistoryTableRecord = db.SelectNodes(transactionHistoryNodePathXML);
+            var transactionHistoryTableRecord = db.SelectNodes(transactionHistoryNodePathXML);
 
-            int transactionTableMaxId = transactionHistoryTableRecord.Count + 1;
+            var transactionTableMaxId = transactionHistoryTableRecord.Count + 1;
 
-            XmlElement newTransaction = db.CreateElement("Transaction");
+            var newTransaction = db.CreateElement("Transaction");
 
-            XmlAttribute attributeId = db.CreateAttribute("id");
+            var attributeId = db.CreateAttribute("id");
             attributeId.Value = transactionTableMaxId.ToString();
             newTransaction.Attributes.Append(attributeId);
 
-            XmlAttribute attributeaccountId = db.CreateAttribute("accountId");
+            var attributeaccountId = db.CreateAttribute("accountId");
             attributeaccountId.Value = accountId.ToString();
             newTransaction.Attributes.Append(attributeaccountId);
 
-            XmlAttribute attributeaccountdatetime = db.CreateAttribute("dateTime");
-            attributeaccountdatetime.Value = dateTime.ToString();
+            var attributeaccountdatetime = db.CreateAttribute("dateTime");
+            attributeaccountdatetime.Value = TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo.Local).ToString();            
             newTransaction.Attributes.Append(attributeaccountdatetime);
 
-            XmlAttribute attributeammount = db.CreateAttribute("ammount");
+            var attributeammount = db.CreateAttribute("ammount");
             attributeammount.Value = ammount.ToString("0.00");
             newTransaction.Attributes.Append(attributeammount);
 
-            XmlAttribute attributebalanceAfterg = db.CreateAttribute("balanceAfter");
+            var attributebalanceAfterg = db.CreateAttribute("balanceAfter");
             attributebalanceAfterg.Value = balanceAfter.ToString("0.00");
             newTransaction.Attributes.Append(attributebalanceAfterg);
 
-            XmlAttribute attributemodifiedBy = db.CreateAttribute("modifiedBy");
+            var attributemodifiedBy = db.CreateAttribute("modifiedBy");
             attributemodifiedBy.Value = modifiedBy;
             newTransaction.Attributes.Append(attributemodifiedBy);
 
-            XmlNode? transactionHistoryTable = db.SelectSingleNode(transactionHistoryTablePathXML);
+            var transactionHistoryTable = db.SelectSingleNode(transactionHistoryTablePathXML);
 
             transactionHistoryTable.AppendChild(newTransaction);
 
             Save();
         }
 
-        public List<HistoricalTransactionData> GetAccountTransactionHistory(int accountId)
+        public IEnumerable<HistoricalTransactionData> GetAccountTransactionHistory(int accountId)
         {
 
-            List<HistoricalTransactionData> result = new();
+            var result = new List<HistoricalTransactionData>();
 
-            XmlNodeList? historyTable = db.SelectNodes(transactionHistoryNodePathXML);
+            var historyTable = db.SelectNodes(transactionHistoryNodePathXML);
 
             foreach (XmlNode? record in historyTable)
             {
 
                 if (accountId == int.Parse(record.Attributes?.GetNamedItem("accountId")?.Value!))
                 {
-                    HistoricalTransactionData transactionData = new();
+                    var transactionData = new HistoricalTransactionData();
 
                     transactionData.Type = decimal.Parse(record.Attributes.GetNamedItem("ammount").Value) > 0 ? "Deposit" : "Withdraw";
 
-                    transactionData.CashAmount = decimal.Parse(record.Attributes.GetNamedItem("ammount").Value).ToString("C");
+                    transactionData.CashAmount = decimal.Parse(record.Attributes.GetNamedItem("ammount").Value);
 
-                    decimal balanceBefore = decimal.Parse(record.Attributes.GetNamedItem("balanceAfter").Value) - decimal.Parse(record.Attributes.GetNamedItem("ammount").Value);
+                    transactionData.BalanceBefore = decimal.Parse(record.Attributes.GetNamedItem("balanceAfter").Value) - decimal.Parse(record.Attributes.GetNamedItem("ammount").Value); ;
 
-                    transactionData.BalanceBefore = balanceBefore.ToString("C");
+                    transactionData.BalanceAfter = decimal.Parse(record.Attributes.GetNamedItem("balanceAfter").Value); 
 
-                    transactionData.BalanceAfter = decimal.Parse(record.Attributes.GetNamedItem("balanceAfter").Value).ToString("C"); 
-
-                    transactionData.Datetime = record.Attributes?.GetNamedItem("dateTime")?.Value!;
-
+                    transactionData.Datetime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.Parse(record.Attributes?.GetNamedItem("dateTime")?.Value), TimeZoneInfo.Local);
+                    
                     transactionData.UserName = record.Attributes.GetNamedItem("modifiedBy").Value;
 
                     result.Add(transactionData);

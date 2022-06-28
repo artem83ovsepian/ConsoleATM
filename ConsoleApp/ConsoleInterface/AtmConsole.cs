@@ -41,7 +41,7 @@ namespace BAL
             Console.WriteLine();
         }
 
-        public static void Pause(int delayMs)
+        public void Pause(int delayMs)
         {
             Thread.Sleep(delayMs);
         }
@@ -65,7 +65,7 @@ namespace BAL
             } while (key != ConsoleKey.Enter);
         }
 
-        public static void ClearScreen()
+        public void ClearScreen()
         {
             Console.Clear();
         }
@@ -129,38 +129,37 @@ namespace BAL
             WriteLine();
         }
 
-        public void PrintTable(List<string> tableHeader, IEnumerable<AtmHistoricalTransaction> tableData)
+        public void PrintTable(IEnumerable<string> tableHeader, IEnumerable<AtmHistoricalTransaction> tableData)
         {
 
             WriteLine(" _________________________ _________________________ _________________________ _________________________ _________________________ _________________________", 'i');
-            
-            for (int i = 0; i < tableHeader.Count; i++)
+
+            var atmHistoricalTransactionHeaderEnumerator = tableHeader.GetEnumerator();
+
+            while (atmHistoricalTransactionHeaderEnumerator.MoveNext())
             {
-                Write("|" + tableHeader[i].ToString().PadRight(25), 'i');
+                Write("|" + (string)atmHistoricalTransactionHeaderEnumerator.Current.ToString().PadRight(25), 'i');
             }
 
             WriteLine("|", 'i');
 
             WriteLine(" ------------------------- ------------------------- ------------------------- ------------------------- ------------------------- -------------------------", 'i');
 
-            //for (int j = 0; j < tableData.Count; j++)
-            IEnumerator atmHistoricalTransactionEnumerator = tableData.GetEnumerator();
+            var atmHistoricalTransactionEnumerator = tableData.GetEnumerator();
 
             while (atmHistoricalTransactionEnumerator.MoveNext())
             {
-                AtmHistoricalTransaction atmHistoricalTransaction = (AtmHistoricalTransaction)atmHistoricalTransactionEnumerator.Current;
-
-
+                var atmHistoricalTransaction = (AtmHistoricalTransaction)atmHistoricalTransactionEnumerator.Current;
 
                 Write("|" + atmHistoricalTransaction.Type?.PadRight(25), 'i');
 
-                Write("|" + atmHistoricalTransaction.CashAmount?.PadRight(25), 'i');
+                Write("|" + atmHistoricalTransaction.CashAmount.ToString("C").PadRight(25), 'i');
 
-                Write("|" + atmHistoricalTransaction.BalanceBefore?.PadRight(25), 'i');
+                Write("|" + atmHistoricalTransaction.BalanceBefore.ToString("C").PadRight(25), 'i');
 
-                Write("|" + atmHistoricalTransaction.BalanceAfter?.PadRight(25), 'i');
+                Write("|" + atmHistoricalTransaction.BalanceAfter.ToString("C").PadRight(25), 'i');
 
-                Write("|" + atmHistoricalTransaction.Datetime?.PadRight(25), 'i');
+                Write("|" + atmHistoricalTransaction.Datetime.ToString().PadRight(25), 'i');
 
                 Write("|" + atmHistoricalTransaction.UserName?.PadRight(25), 'i');
 

@@ -16,19 +16,9 @@ namespace ConsoleATM.ConsoleApp
 
             var atmAccount = new AtmAccount(atmDatabase);
 
-            var atmApplicationMainMenu = new AtmApplicationMainMenu();
-
             while (true)
             {
-                atmConsole.Write("Input username and press Enter: ");
-
-                var inputUserName = atmConsole.ReadUserName();
-
-                atmConsole.Write("Input password and press Enter: ");
-
-                var inoutUserPassword = atmConsole.ReadPassword();
-
-                atmApplicationUser.Init(inputUserName, inoutUserPassword);
+                AuthinticateUser(atmConsole, atmApplicationUser);
 
                 if (atmApplicationUser.Id > 0)
                 {
@@ -50,92 +40,7 @@ namespace ConsoleATM.ConsoleApp
 
                                 atmConsole.Pause();
 
-                                ConsoleKeyInfo consoleKeyInput;
-
-                                int? consolKeyNumber = null;
-
-                                while (true)
-                                {
-                                    AtmConsole.ClearScreen();
-
-                                    atmConsole.PrintMenu(atmApplicationMainMenu);
-
-                                    consoleKeyInput = Console.ReadKey(intercept: true);
-
-                                    if (char.IsDigit(consoleKeyInput.KeyChar))
-                                    {
-                                        consolKeyNumber = int.Parse(consoleKeyInput.KeyChar.ToString());
-
-                                        if (consolKeyNumber == atmApplicationMainMenu.BalanceMenuNumber)
-                                        {
-                                            atmConsole.Write("Current Balance is: ");
-
-                                            atmConsole.WriteLine(atmAccount.Balance.ToString("C"), 'i');
-
-                                            atmConsole.Pause();
-                                        }
-
-                                        if (consolKeyNumber == atmApplicationMainMenu.DepositMenuNumber)
-                                        {
-                                            atmConsole.Write("Enter Deposite Ammount: ");
-
-                                            string? deposit = Console.ReadLine();
-
-                                            string operationResult = atmAccount.CashDeposite(deposit);
-
-                                            if (operationResult != "")
-                                            {
-                                                atmConsole.WriteLine(operationResult, 'w');
-                                            }
-                                            else
-                                            {
-                                                atmDatabase.SaveTransactionHistory(atmAccount.Id, DateTime.Now, Math.Round(decimal.Parse(deposit), 2), atmAccount.Balance, atmApplicationUser.FullName);
-
-                                                atmConsole.WriteLine("Operation Successful", 'i');
-                                            }
-
-                                            atmConsole.Pause();
-                                        }
-
-                                        if (consolKeyNumber == atmApplicationMainMenu.WithdrawMenuNumber)
-                                        {
-                                            atmConsole.Write("Enter Withdraw Ammount: ");
-
-                                            string? deposit = Console.ReadLine();
-
-                                            string operationResult = atmAccount.CashWithdraw(deposit);
-
-                                            if (operationResult != "")
-                                            {
-                                                atmConsole.WriteLine(operationResult, 'w');
-                                            }
-                                            else
-                                            {
-                                                atmDatabase.SaveTransactionHistory(atmAccount.Id, DateTime.Now, Math.Round(decimal.Parse(deposit), 2) * (-1), atmAccount.Balance, atmApplicationUser.FullName);
-
-                                                atmConsole.WriteLine("Operation Successful", 'i');
-                                            }
-                                            atmConsole.Pause();
-                                        }
-
-                                        if (consolKeyNumber == atmApplicationMainMenu.HistoryMenuNumber)
-                                        {                                           
-
-                                            List<String> header = new() { "Type    " , "Cash Amount", "Balance Before" , "Balance After" , "Date Time" , "User Name" };
-
-                                            IEnumerable<AtmHistoricalTransaction> transactionHistory = atmDatabase.GetAtmAccountTransactionHistory(atmAccount.Id);
-
-                                            atmConsole.PrintTable(header, transactionHistory);
-                                        }
-
-                                        if (consolKeyNumber == atmApplicationMainMenu.LogoutMenuNumber)
-                                        {
-                                            break;
-                                        }
-
-                                    }
-
-                                }
+                                WorkWithMainMenu(atmDatabase, atmConsole, atmApplicationUser, atmAccount);
 
                                 atmConsole.WriteLine("Logout", 'i');
 
@@ -165,10 +70,133 @@ namespace ConsoleATM.ConsoleApp
 
                 atmConsole.Pause();
 
-                AtmConsole.ClearScreen();
+                atmConsole.ClearScreen();
             }
         }
 
+        private static void WorkWithMainMenu(AtmDatabase atmDatabase, AtmConsole atmConsole, AtmApplicationUser atmApplicationUser, AtmAccount atmAccount)
+        {
+            var atmApplicationMainMenu = new AtmApplicationMainMenu();
+
+            ConsoleKeyInfo consoleKeyInput;
+
+            int? consolKeyNumber = null;
+
+            while (true)
+            {
+                atmConsole.ClearScreen();
+
+                atmConsole.PrintMenu(atmApplicationMainMenu);
+
+                consoleKeyInput = Console.ReadKey(intercept: true);
+
+                if (char.IsDigit(consoleKeyInput.KeyChar))
+                {
+                    consolKeyNumber = int.Parse(consoleKeyInput.KeyChar.ToString());
+
+                    if (consolKeyNumber == atmApplicationMainMenu.BalanceMenuNumber)
+                    {
+                        WorkWithMainMenuBalance(atmConsole, atmAccount);
+                    }
+
+                    if (consolKeyNumber == atmApplicationMainMenu.DepositMenuNumber)
+                    {
+                        WorkWithMainMenuDeposit(atmDatabase, atmConsole, atmApplicationUser, atmAccount);
+                    }
+
+                    if (consolKeyNumber == atmApplicationMainMenu.WithdrawMenuNumber)
+                    {
+                        WorkWithMainMenuWithdraw(atmDatabase, atmConsole, atmApplicationUser, atmAccount);
+                    }
+
+                    if (consolKeyNumber == atmApplicationMainMenu.HistoryMenuNumber)
+                    {
+                        WorkWithMainMenuPrintHistory(atmDatabase, atmConsole, atmAccount);
+                    }
+
+                    if (consolKeyNumber == atmApplicationMainMenu.LogoutMenuNumber)
+                    {
+                        break;
+                    }
+
+                }
+
+            }
+        }
+
+        private static void WorkWithMainMenuBalance(AtmConsole atmConsole, AtmAccount atmAccount)
+        {
+            atmConsole.Write("Current Balance is: ");
+
+            atmConsole.WriteLine(atmAccount.Balance.ToString("C"), 'i');
+
+            atmConsole.Pause();
+        }
+
+        private static void WorkWithMainMenuPrintHistory(AtmDatabase atmDatabase, AtmConsole atmConsole, AtmAccount atmAccount)
+        {
+            List<String> header = new() { "Type    ", "Cash Amount", "Balance Before", "Balance After", "Date Time", "User Name" };
+
+            var transactionHistory = atmDatabase.GetAtmAccountTransactionHistory(atmAccount.Id);
+
+            atmConsole.PrintTable(header, transactionHistory);
+        }
+
+        private static void WorkWithMainMenuWithdraw(AtmDatabase atmDatabase, AtmConsole atmConsole, AtmApplicationUser atmApplicationUser, AtmAccount atmAccount)
+        {
+            atmConsole.Write("Enter Withdraw Ammount: ");
+
+            string? deposit = Console.ReadLine();
+
+            string operationResult = atmAccount.CashWithdraw(deposit);
+
+            if (operationResult != "")
+            {
+                atmConsole.WriteLine(operationResult, 'w');
+            }
+            else
+            {
+                atmDatabase.SaveTransactionHistory(atmAccount.Id, DateTime.Now, Math.Round(decimal.Parse(deposit), 2) * (-1), atmAccount.Balance, atmApplicationUser.FullName);
+
+                atmConsole.WriteLine("Operation Successful", 'i');
+            }
+            atmConsole.Pause();
+        }
+
+        private static void WorkWithMainMenuDeposit(AtmDatabase atmDatabase, AtmConsole atmConsole, AtmApplicationUser atmApplicationUser, AtmAccount atmAccount)
+        {
+            atmConsole.Write("Enter Deposite Ammount: ");
+
+            string? deposit = Console.ReadLine();
+
+            string operationResult = atmAccount.CashDeposite(deposit);
+
+            if (operationResult != "")
+            {
+                atmConsole.WriteLine(operationResult, 'w');
+            }
+            else
+            {
+                atmDatabase.SaveTransactionHistory(atmAccount.Id, DateTime.Now, Math.Round(decimal.Parse(deposit), 2), atmAccount.Balance, atmApplicationUser.FullName);
+
+                atmConsole.WriteLine("Operation Successful", 'i');
+            }
+
+            atmConsole.Pause();
+        }
+
+        private static void AuthinticateUser(AtmConsole atmConsole, AtmApplicationUser atmApplicationUser)
+        {
+            atmConsole.Write("Input username and press Enter: ");
+
+            var inputUserName = atmConsole.ReadUserName();
+
+            atmConsole.Write("Input password and press Enter: ");
+
+            var inputUserPassword = atmConsole.ReadPassword();
+
+            atmApplicationUser.Init(inputUserName, inputUserPassword);
+        }
     }
 
 

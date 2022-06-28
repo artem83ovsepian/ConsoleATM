@@ -9,10 +9,10 @@
 	</UserTable>
 
 	<AccountTable>
-		<Account id="1" userId="1" balance="0.50" isActive="0" />
-		<Account id="2" userId="2" balance="100.00" isActive="1" />
-		<Account id="3" userId="3" balance="-1000.00" isActive="0" />
-		<Account id="4" userId="1" balance="10.25" isActive="1" />
+		<Account id="1" userId="1" balance="0.50" isActive="0" overdraft="1000.00"/>
+		<Account id="2" userId="2" balance="100.00" isActive="1" overdraft="1000.00" />
+		<Account id="3" userId="3" balance="-1000.00" isActive="0" overdraft="1000.00" />
+		<Account id="4" userId="1" balance="10.25" isActive="1" overdraft="1000.00" />
 	</AccountTable>
 
 	<TransactionHistoryTable>

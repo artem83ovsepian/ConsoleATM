@@ -2,16 +2,16 @@
 {
     public class AtmHistoricalTransaction
     {
-        public string? Type;
+        public string Type { get; set; }
 
-        public string? CashAmount;
+        public decimal CashAmount { get; set; }
 
-        public string? BalanceBefore;
+        public decimal BalanceBefore { get; set; }
 
-        public string? BalanceAfter;
+        public decimal BalanceAfter { get; set; }
 
-        public string? Datetime;
+        public DateTime Datetime { get; set; }
 
-        public string? UserName;
+        public string UserName { get; set; }
     }
 }

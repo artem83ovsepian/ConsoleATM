@@ -14,9 +14,11 @@ namespace BAL
 
         public int IsActive;
 
+        public decimal OverDraft;
+
         AtmDatabase atmDB;
 
-        AccountData atmAccountData = new AccountData();
+        AccountData atmAccountData = new ();
 
         public void Init(int userId)
         {
@@ -27,17 +29,17 @@ namespace BAL
             UserId = atmAccountData.UserId;
 
             Balance = atmAccountData.Balance;
+
+            OverDraft = atmAccountData.OverDraft;
         }
 
         public string CashDeposite(string? deposit)
         {
-            string result = "";
-
-            decimal decDeposit = 0;
+            var result = "";
 
             try
             {
-                decDeposit = Math.Round(decimal.Parse(deposit), 2);
+                var decDeposit = Math.Round(decimal.Parse(deposit), 2);
 
                 if (decDeposit <= 0)
                 {
@@ -61,13 +63,13 @@ namespace BAL
 
         public string CashWithdraw(string? deposit)
         {
-            string result = "";
+            var result = "";
 
-            decimal decDeposit = 0;
+            //decimal decDeposit = 0;
 
             try
             {
-                decDeposit = Math.Round(decimal.Parse(deposit), 2);
+                var decDeposit = Math.Round(decimal.Parse(deposit), 2);
 
                 if (decDeposit <= 0)
                 {
@@ -75,10 +77,16 @@ namespace BAL
                 }
                 else
                 {
+                    if ((Balance - decDeposit) < (-OverDraft))
+                    {
+                        result = "Account Credit limit exceeded. Try withdrow lower number.";
+                    }
+                    else
+                    {
+                        Balance -= decDeposit;
 
-                    Balance -= decDeposit;
-
-                    SaveBalance(Id, Balance);
+                        SaveBalance(Id, Balance);
+                    }
                 }
             }
             catch

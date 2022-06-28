@@ -10,30 +10,22 @@ namespace BAL
 
         public IEnumerable<AtmHistoricalTransaction> GetAtmAccountTransactionHistory(int accountId)
         {
-            List<HistoricalTransactionData> historicalTransactionData = GetAccountTransactionHistory(accountId);
+            var result = new List<AtmHistoricalTransaction>();
 
-            List<AtmHistoricalTransaction> atmHistoricalTransaction = new();
-
-            foreach (HistoricalTransactionData transaction in historicalTransactionData)
+            foreach (var transaction in GetAccountTransactionHistory(accountId))
             {
-                var atmHistoricalTransactionObject = new AtmHistoricalTransaction
+                result.Add(new AtmHistoricalTransaction
                 {
                     Type = transaction.Type,
-
                     CashAmount = transaction.CashAmount,
-
                     BalanceBefore = transaction.BalanceBefore,
-
                     BalanceAfter = transaction.BalanceAfter,
-
                     Datetime = transaction.Datetime,
-
                     UserName = transaction.UserName
-                };
-
-                atmHistoricalTransaction.Add(atmHistoricalTransactionObject);
+                });
             }
-            return atmHistoricalTransaction;
+
+            return result;
         }
     }
 }

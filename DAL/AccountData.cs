@@ -9,5 +9,7 @@
         public decimal Balance;
 
         public int IsActive;
+
+        public decimal OverDraft;
     }
 }
