@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dbo>
+	<Application allowedUsersCount="1" actualUsersCount="0" delayMS="2500" />
+	
+	<UserTable>
+		<User id="1" name="user1" password="password1" fullName="User One" isActive="1" />
+		<User id="2" name="user2" password="password2" fullName="User Two" isActive="0" />
+		<User id="3" name="user3" password="password3" fullName="User Three" isActive="1" />
+	</UserTable>
+
+	<AccountTable>
+		<Account id="1" userId="1" balance="0.50" isActive="0" />
+		<Account id="2" userId="2" balance="100.00" isActive="1" />
+		<Account id="3" userId="3" balance="-1000.00" isActive="0" />
+		<Account id="4" userId="1" balance="10.25" isActive="1" />
+	</AccountTable>
+
+	<TransactionHistoryTable>
+		<Transaction id="1" accountId="4" dateTime="6/20/2022 9:09:40 AM" ammount="-60.15" balanceAfter="0.00" modifiedBy="User One" />
+		<Transaction id="2" accountId="2" dateTime="6/20/2022 9:09:40 PM" ammount="-50.00" balanceAfter="100.00" modifiedBy="User Two" />
+		<Transaction id="3" accountId="3" dateTime="6/20/2022 9:09:40 PM" ammount="-1000.00" balanceAfter="-1000.00" modifiedBy="User Three" />
+		<Transaction id="4" accountId="4" dateTime="6/21/2022 18:03:51 PM" ammount="10.25" balanceAfter="10.25" modifiedBy="User One" />		
+	</TransactionHistoryTable>	
+</dbo>
+	
