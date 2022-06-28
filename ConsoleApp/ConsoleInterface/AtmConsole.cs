@@ -151,7 +151,7 @@ namespace BAL
             {
                 var atmHistoricalTransaction = (AtmHistoricalTransaction)atmHistoricalTransactionEnumerator.Current;
 
-                Write("|" + atmHistoricalTransaction.Type?.PadRight(25), 'i');
+                Write("|" + atmHistoricalTransaction.Type.PadRight(25), 'i');
 
                 Write("|" + atmHistoricalTransaction.CashAmount.ToString("C").PadRight(25), 'i');
 
@@ -161,7 +161,7 @@ namespace BAL
 
                 Write("|" + atmHistoricalTransaction.Datetime.ToString().PadRight(25), 'i');
 
-                Write("|" + atmHistoricalTransaction.UserName?.PadRight(25), 'i');
+                Write("|" + atmHistoricalTransaction.UserName.PadRight(25), 'i');
 
                 Write("|", 'i');
 

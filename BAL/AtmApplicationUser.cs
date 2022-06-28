@@ -9,9 +9,9 @@ namespace BAL
 
         public int Id;
 
-        public string? Name;
+        public string Name;
 
-        public string? FullName;
+        public string FullName;
 
         public int CurrentAccountId;
 

@@ -2,14 +2,14 @@
 {
     public class AccountData
     {
-        public int Id;
+        public int Id { get; set; }
 
-        public int UserId;
+        public int UserId { get; set; }
 
-        public decimal Balance;
+        public decimal Balance { get; set; }
 
-        public int IsActive;
+        public int IsActive { get; set; }
 
-        public decimal OverDraft;
+        public decimal OverDraft { get; set; }
     }
 }

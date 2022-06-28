@@ -33,7 +33,7 @@ namespace BAL
             OverDraft = atmAccountData.OverDraft;
         }
 
-        public string CashDeposite(string? deposit)
+        public string CashDeposite(string deposit)
         {
             var result = "";
 
@@ -61,7 +61,7 @@ namespace BAL
             return result;
         }
 
-        public string CashWithdraw(string? deposit)
+        public string CashWithdraw(string deposit)
         {
             var result = "";
 

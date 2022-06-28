@@ -77,22 +77,20 @@ namespace ConsoleATM.ConsoleApp
         private static void WorkWithMainMenu(AtmDatabase atmDatabase, AtmConsole atmConsole, AtmApplicationUser atmApplicationUser, AtmAccount atmAccount)
         {
             var atmApplicationMainMenu = new AtmApplicationMainMenu();
-
-            ConsoleKeyInfo consoleKeyInput;
-
-            int? consolKeyNumber = null;
-
+            
             while (true)
             {
                 atmConsole.ClearScreen();
 
                 atmConsole.PrintMenu(atmApplicationMainMenu);
 
+                ConsoleKeyInfo consoleKeyInput; 
+                
                 consoleKeyInput = Console.ReadKey(intercept: true);
 
                 if (char.IsDigit(consoleKeyInput.KeyChar))
                 {
-                    consolKeyNumber = int.Parse(consoleKeyInput.KeyChar.ToString());
+                    var consolKeyNumber = int.Parse(consoleKeyInput.KeyChar.ToString());
 
                     if (consolKeyNumber == atmApplicationMainMenu.BalanceMenuNumber)
                     {
@@ -146,9 +144,9 @@ namespace ConsoleATM.ConsoleApp
         {
             atmConsole.Write("Enter Withdraw Ammount: ");
 
-            string? deposit = Console.ReadLine();
+            var deposit = Console.ReadLine();
 
-            string operationResult = atmAccount.CashWithdraw(deposit);
+            var operationResult = atmAccount.CashWithdraw(deposit);
 
             if (operationResult != "")
             {
@@ -167,9 +165,9 @@ namespace ConsoleATM.ConsoleApp
         {
             atmConsole.Write("Enter Deposite Ammount: ");
 
-            string? deposit = Console.ReadLine();
+            var deposit = Console.ReadLine();
 
-            string operationResult = atmAccount.CashDeposite(deposit);
+            var operationResult = atmAccount.CashDeposite(deposit);
 
             if (operationResult != "")
             {
