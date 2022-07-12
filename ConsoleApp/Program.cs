@@ -1,4 +1,5 @@
 ﻿using BAL;
+using BAL.Entities;
 
 namespace ConsoleATM.ConsoleApp
 {
@@ -8,9 +9,11 @@ namespace ConsoleATM.ConsoleApp
         {
             var atmDatabase = new AtmDatabase("xml");
 
-            var atmApplication = new AtmApplication(atmDatabase);
+            var atmApplication = (new AtmApplication(atmDatabase)).GetApplication();
 
-            var atmConsole = new AtmConsole(atmApplication.DelayMS);
+            //private readonly Application _application;
+
+        var atmConsole = new AtmConsole(atmApplication.DelayMS);
 
             var atmApplicationUser = new AtmApplicationUser(atmDatabase);
 
@@ -36,7 +39,7 @@ namespace ConsoleATM.ConsoleApp
                             if (atmAccount.Id > 0)
                             {
 
-                                atmApplication.IncrementUserCountWithOne();
+                                atmDatabase.IncrementUserCountWithOne();
 
                                 atmConsole.Pause();
 
@@ -44,7 +47,7 @@ namespace ConsoleATM.ConsoleApp
 
                                 atmConsole.WriteLine("Logout", 'i');
 
-                                atmApplication.DecrementUserCountWithOne();
+                                atmDatabase.DecrementUserCountWithOne();
                             }
                             else
                             {

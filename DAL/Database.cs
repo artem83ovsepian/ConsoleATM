@@ -196,6 +196,16 @@ namespace DAL
             return result;
         }
 
+        public void IncrementUserCountWithOne()
+        {
+            SetActualUsersCount(1);
+        }
+
+        public void DecrementUserCountWithOne()
+        {
+            SetActualUsersCount(-1);
+        }
+
 
     }
 }
