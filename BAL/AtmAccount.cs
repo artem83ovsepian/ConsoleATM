@@ -1,4 +1,5 @@
 ﻿using DAL;
+using BAL.Entities;
 
 namespace BAL
 {
@@ -12,34 +13,20 @@ namespace BAL
             _atmDB = atmDatabase; 
         }
 
-        public int Id;
-
-        public int UserId;
-
-        public decimal Balance;
-
-        public int IsActive;
-
-        public decimal OverDraft;
-
-
-
-        AccountData atmAccountData = new ();
-
-        public void Init(int userId)
+        public Account GetAccount(int userId)
         {
-            atmAccountData = _atmDB.GetAtmAccount(userId);
+            var atmAccountData = _atmDB.GetAtmUserAccount(userId);
 
-            Id = atmAccountData.Id;
-
-            UserId = atmAccountData.UserId;
-
-            Balance = atmAccountData.Balance;
-
-            OverDraft = atmAccountData.OverDraft;
+            return new Account
+            {                
+                Id = atmAccountData.Id,
+                UserId = atmAccountData.UserId,
+                Balance = atmAccountData.Balance,
+                OverDraft = atmAccountData.OverDraft
+            };
         }
 
-        public string CashDeposite(string deposit)
+        public string CashDeposite(int accountId, string deposit, out decimal balanceAfter)
         {
             var result = "";
 
@@ -53,21 +40,23 @@ namespace BAL
                 }
                 else
                 {
+                    var balance = _atmDB.GetAtmAccountBalance(accountId);
+                    balance += decDeposit;
 
-                    Balance += decDeposit;
-
-                    SaveBalance(Id, Balance);
+                    SaveBalance(accountId, balance);
                 }
             }
             catch
             {
                 result = "Enter valid Deposit number";
-            }   
+            }
+
+            balanceAfter = _atmDB.GetAtmAccountBalance(accountId);
 
             return result;
         }
 
-        public string CashWithdraw(string deposit)
+        public string CashWithdraw(int accountId, string deposit, out decimal balanceAfter)
         {
             var result = "";
 
@@ -83,15 +72,18 @@ namespace BAL
                 }
                 else
                 {
-                    if ((Balance - decDeposit) < (-OverDraft))
+                    var balance = _atmDB.GetAtmAccountBalance(accountId);
+                    var overDraft = _atmDB.GetAtmUserOverdraft(accountId);
+
+                    if ((balance - decDeposit) < (-overDraft))
                     {
                         result = "Account Credit limit exceeded. Try withdrow lower number.";
                     }
                     else
                     {
-                        Balance -= decDeposit;
+                        balance -= decDeposit;
 
-                        SaveBalance(Id, Balance);
+                        SaveBalance(accountId, balance);
                     }
                 }
             }
@@ -100,12 +92,19 @@ namespace BAL
                 result = "Enter valid number";
             }
 
+            balanceAfter = _atmDB.GetAtmAccountBalance(accountId);
+
             return result;
         }
 
-        private void SaveBalance(int accountId, decimal balance)
+        private void SaveBalance(int accountId, decimal accountBalance)
         {
-            _atmDB.SaveAtmAccount(accountId, balance);
+            _atmDB.SaveAtmAccountBalance(accountId, accountBalance);
+        }
+
+        public decimal GetBalance(int accountId)
+        {
+            return _atmDB.GetAtmAccountBalance(accountId);
         }
     }
 }

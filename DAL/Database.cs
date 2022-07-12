@@ -4,7 +4,11 @@ namespace DAL
 {
     public class Database
     {
-        public Database(string dataSource) { Datasource = dataSource; Init(); }
+        public Database(string dataSource) 
+        { 
+            Datasource = dataSource; 
+            Init(); 
+        }
 
         private readonly string Datasource;
 
@@ -83,7 +87,7 @@ namespace DAL
 
         }
 
-        public AccountData GetAtmAccount(int userId)
+        public AccountData GetAtmUserAccount(int userId)
         {
             var accountTable = db.SelectNodes(accountNodePathXML);            
 
@@ -108,7 +112,7 @@ namespace DAL
             return atmAccountData;
         }
 
-        public void SaveAtmAccount(int accountId, decimal balance)
+        public void SaveAtmAccountBalance(int accountId, decimal balance)
         {
             var accountTable = db.SelectNodes(accountNodePathXML);
 
@@ -206,6 +210,41 @@ namespace DAL
             SetActualUsersCount(-1);
         }
 
+        public decimal GetAtmAccountBalance(int accountId)
+        {
+            var accountTable = db.SelectNodes(accountNodePathXML);
+
+            decimal balance = 0;
+
+            foreach (XmlNode account in accountTable)
+            {
+                if (int.Parse(account.Attributes.GetNamedItem("id").Value!) == accountId)
+                {
+                    balance = decimal.Parse(account.Attributes.GetNamedItem("balance").Value!);
+                }
+            }
+
+            return balance;
+        }
+
+        public decimal GetAtmUserOverdraft(int accountId)
+        {
+            decimal overDraft = 0;
+
+            var accountTable = db.SelectNodes(accountNodePathXML);
+
+            foreach (XmlNode account in accountTable)
+            {
+                if (int.Parse(account.Attributes.GetNamedItem("id").Value!) == accountId)
+                {
+                    overDraft = decimal.Parse(account.Attributes.GetNamedItem("overdraft").Value!);
+
+                    break;
+                }
+            }
+
+            return overDraft;
+        }
 
     }
 }
