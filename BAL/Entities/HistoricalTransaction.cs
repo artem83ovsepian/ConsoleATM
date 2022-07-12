@@ -1,4 +1,4 @@
-﻿namespace BAL
+﻿namespace BAL.Entities
 {
     public class HistoricalTransaction
     {

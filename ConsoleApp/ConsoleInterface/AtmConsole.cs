@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using BAL.Entities;
 
 namespace BAL
 {

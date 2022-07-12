@@ -4,7 +4,13 @@ namespace BAL
 {
     public class AtmApplication
     {
-        public AtmApplication(AtmDatabase atmDatabase) { atmDB = atmDatabase; Init(); }
+        private readonly AtmDatabase _atmDB;
+
+        public AtmApplication(AtmDatabase atmDatabase) 
+        { 
+            _atmDB = atmDatabase;
+            Init(); 
+        }
 
         public int AllowedUsersCount;
 
@@ -12,25 +18,23 @@ namespace BAL
 
         public int DelayMS;
 
-        private AtmDatabase atmDB;
-
         public void Init()
         {
-            AllowedUsersCount = int.Parse(atmDB.GetApplicationProperty("allowedUsersCount"));
+            AllowedUsersCount = int.Parse(_atmDB.GetApplicationProperty("allowedUsersCount"));
 
-            ActualUsersCount = int.Parse(atmDB.GetApplicationProperty("actualUsersCount"));
+            ActualUsersCount = int.Parse(_atmDB.GetApplicationProperty("actualUsersCount"));
 
-            DelayMS = int.Parse(atmDB.GetApplicationProperty("delayMS")); 
+            DelayMS = int.Parse(_atmDB.GetApplicationProperty("delayMS")); 
         }
 
         public void IncrementUserCountWithOne()
         {
-            atmDB.SetActualUsersCount(1);
+            _atmDB.SetActualUsersCount(1);
         }
 
         public void DecrementUserCountWithOne()
         {
-            atmDB.SetActualUsersCount(-1);
+            _atmDB.SetActualUsersCount(-1);
         }
     }
 }

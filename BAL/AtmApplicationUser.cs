@@ -4,8 +4,11 @@ namespace BAL
 {
     public class AtmApplicationUser
     {
-        private AtmDatabase atmDB;
-        public AtmApplicationUser(AtmDatabase atmDatabase) { atmDB = atmDatabase; }
+        private readonly AtmDatabase _atmDB;
+        public AtmApplicationUser(AtmDatabase atmDatabase) 
+        { 
+            _atmDB = atmDatabase; 
+        }
 
         public int Id;
 
@@ -19,7 +22,7 @@ namespace BAL
 
         public void Init(string userName, string password)
         {
-            var atmUserData = atmDB.GetAtmUser(userName, password);
+            var atmUserData = _atmDB.GetAtmUser(userName, password);
 
             Id = atmUserData.Id;
 

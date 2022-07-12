@@ -3,8 +3,14 @@
 namespace BAL
 {
     public class AtmAccount
-    { 
-        public AtmAccount(AtmDatabase atmDatabase) { atmDB = atmDatabase; }
+    {
+
+        private readonly AtmDatabase _atmDB;
+
+        public AtmAccount(AtmDatabase atmDatabase) 
+        {
+            _atmDB = atmDatabase; 
+        }
 
         public int Id;
 
@@ -16,13 +22,13 @@ namespace BAL
 
         public decimal OverDraft;
 
-        AtmDatabase atmDB;
+
 
         AccountData atmAccountData = new ();
 
         public void Init(int userId)
         {
-            atmAccountData = atmDB.GetAtmAccount(userId);
+            atmAccountData = _atmDB.GetAtmAccount(userId);
 
             Id = atmAccountData.Id;
 
@@ -99,7 +105,7 @@ namespace BAL
 
         private void SaveBalance(int accountId, decimal balance)
         {
-            atmDB.SaveAtmAccount(accountId, balance);
+            _atmDB.SaveAtmAccount(accountId, balance);
         }
     }
 }
