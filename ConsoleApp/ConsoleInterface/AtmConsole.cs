@@ -129,7 +129,7 @@ namespace BAL
             WriteLine();
         }
 
-        public void PrintTable(IEnumerable<string> tableHeader, IEnumerable<AtmHistoricalTransaction> tableData)
+        public void PrintTable(IEnumerable<string> tableHeader, IEnumerable<HistoricalTransaction> tableData)
         {
 
             WriteLine(" _________________________ _________________________ _________________________ _________________________ _________________________ _________________________", 'i');
@@ -149,7 +149,7 @@ namespace BAL
 
             while (atmHistoricalTransactionEnumerator.MoveNext())
             {
-                var atmHistoricalTransaction = (AtmHistoricalTransaction)atmHistoricalTransactionEnumerator.Current;
+                var atmHistoricalTransaction = (HistoricalTransaction)atmHistoricalTransactionEnumerator.Current;
 
                 Write("|" + atmHistoricalTransaction.Type.PadRight(25), 'i');
 

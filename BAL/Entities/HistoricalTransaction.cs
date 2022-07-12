@@ -1,6 +1,6 @@
 ﻿namespace BAL
 {
-    public class AtmHistoricalTransaction
+    public class HistoricalTransaction
     {
         public string Type { get; set; }
 
