@@ -5,6 +5,8 @@ namespace ConsoleATM.ConsoleApp
 {
     class Program
     {
+        //private ApplicationUser User { get; set; }
+
         public static void Main()
         {
             var atmDatabase = new AtmDatabase("xml");
@@ -13,18 +15,18 @@ namespace ConsoleATM.ConsoleApp
 
             var atmConsole = new AtmConsole(atmApplication.DelayMS);
 
-            var atmApplicationUser = new AtmApplicationUser(atmDatabase);
+            ApplicationUser User;
 
-            var atmAccount = new AtmAccount(atmDatabase);
+            Account Account;
 
 
             while (true)
             {
-                AuthinticateUser(atmConsole, atmApplicationUser);
+                User = AuthinticateUser(atmConsole, atmDatabase);
 
-                if (atmApplicationUser.Id > 0)
+                if (User.Id > 0)
                 {
-                    if (atmApplicationUser.IsActive != 0)
+                    if (User.IsActive != 0)
                     {
 
                         atmConsole.WriteLine("Login Succeeded.", 'i');
@@ -33,16 +35,16 @@ namespace ConsoleATM.ConsoleApp
                         {
                             atmConsole.WriteLine("Access allowed.", 'i');
 
-                            var account = atmAccount.GetAccount(atmApplicationUser.Id);
+                            Account = (new AtmAccount(atmDatabase)).GetAccount(User.Id);
 
-                            if (account.Id > 0)
+                            if (Account.Id > 0)
                             {
 
                                 atmDatabase.IncrementUserCountWithOne();
 
                                 atmConsole.Pause();
 
-                                WorkWithMainMenu(atmDatabase, atmConsole, atmApplicationUser.FullName, account.Id);
+                                WorkWithMainMenu(atmDatabase, atmConsole, User.FullName, Account.Id);
 
                                 atmConsole.WriteLine("Logout", 'i');
 
@@ -185,7 +187,7 @@ namespace ConsoleATM.ConsoleApp
             atmConsole.Pause();
         }
 
-        private static void AuthinticateUser(AtmConsole atmConsole, AtmApplicationUser atmApplicationUser)
+        private static ApplicationUser AuthinticateUser(AtmConsole atmConsole, AtmDatabase atmDatabase)
         {
             atmConsole.Write("Input username and press Enter: ");
 
@@ -195,7 +197,18 @@ namespace ConsoleATM.ConsoleApp
 
             var inputUserPassword = atmConsole.ReadPassword();
 
-            atmApplicationUser.Init(inputUserName, inputUserPassword);
+            var atmUser = (new AtmApplicationUser(atmDatabase)).GetUser(inputUserName, inputUserPassword);
+
+            return new ApplicationUser
+            {
+                Id = atmUser.Id,
+                Name = atmUser.Name,
+                FullName = atmUser.FullName,
+                CurrentAccountId = atmUser.CurrentAccountId,
+                IsActive = atmUser.IsActive
+            };
+
+            //return atmApplicationUser.GetUser(inputUserName, inputUserPassword);
         }
     }
 

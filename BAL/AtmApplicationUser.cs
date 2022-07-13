@@ -1,4 +1,5 @@
 ﻿using DAL;
+using BAL.Entities;
 
 namespace BAL
 {
@@ -10,29 +11,18 @@ namespace BAL
             _atmDB = atmDatabase; 
         }
 
-        public int Id;
-
-        public string Name;
-
-        public string FullName;
-
-        public int CurrentAccountId;
-
-        public int IsActive;
-
-        public void Init(string userName, string password)
+        public ApplicationUser GetUser(string userName, string password)
         {
             var atmUserData = _atmDB.GetAtmUser(userName, password);
 
-            Id = atmUserData.Id;
-
-            Name = atmUserData.Name;
-
-            FullName = atmUserData.FullName;
-
-            CurrentAccountId = atmUserData.CurrentAccountId;
-
-            IsActive = atmUserData.IsActive;            
+            return new ApplicationUser 
+            {
+                Id = atmUserData.Id,
+                Name = atmUserData.Name,
+                FullName = atmUserData.FullName,
+                CurrentAccountId = atmUserData.CurrentAccountId,
+                IsActive = atmUserData.IsActive
+            };
         }
     }
 }
