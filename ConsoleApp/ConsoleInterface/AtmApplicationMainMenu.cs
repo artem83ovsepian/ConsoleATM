@@ -8,7 +8,8 @@
             ," 2) Cash Deposit"
             ," 3) Cash Withdraw" 
             ," 4) Print Transactions History"
-            ," 5) Logout"
+            ," 5) Show Limits"
+            ," 6) Logout"
         };
 
         public int BalanceMenuNumber = 1;
@@ -19,7 +20,9 @@
 
         public int HistoryMenuNumber = 4;
 
-        public int LogoutMenuNumber = 5;
+        public int LimitsMenuNumber = 5;
+
+        public int LogoutMenuNumber = 6;
 
     }
 }

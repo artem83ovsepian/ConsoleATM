@@ -24,5 +24,10 @@ namespace BAL
                 IsActive = atmUserData.IsActive
             };
         }
+
+        public decimal GetLimit(int userId)
+        {
+            return _atmDB.GetAtmUserOverdraft(userId);
+        }
     }
 }

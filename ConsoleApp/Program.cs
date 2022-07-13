@@ -116,6 +116,11 @@ namespace ConsoleATM.ConsoleApp
                         WorkWithMainMenuPrintHistory(atmDatabase, atmConsole, atmAccountId);
                     }
 
+                    if (consolKeyNumber == atmApplicationMainMenu.LimitsMenuNumber)
+                    {
+                        WorkWithMainMenuLimits(atmDatabase, atmConsole, atmAccountId);
+                    }
+
                     if (consolKeyNumber == atmApplicationMainMenu.LogoutMenuNumber)
                     {
                         break;
@@ -134,6 +139,16 @@ namespace ConsoleATM.ConsoleApp
 
             atmConsole.Pause();
         }
+
+        private static void WorkWithMainMenuLimits(AtmDatabase atmDatabase, AtmConsole atmConsole, int accountId)
+        {
+            atmConsole.Write("Current Cash Withdraw Overdraft is: ");
+
+            atmConsole.WriteLine((new AtmApplicationUser(atmDatabase)).GetLimit(accountId).ToString("C"), 'i');
+
+            atmConsole.Pause();
+        }
+        
 
         private static void WorkWithMainMenuPrintHistory(AtmDatabase atmDatabase, AtmConsole atmConsole, int atmAccountId)
         {
