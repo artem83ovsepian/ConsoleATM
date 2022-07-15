@@ -13,15 +13,10 @@
         };
 
         public int BalanceMenuNumber = 1;
-
         public int DepositMenuNumber = 2;
-
         public int WithdrawMenuNumber = 3;
-
         public int HistoryMenuNumber = 4;
-
         public int LimitsMenuNumber = 5;
-
         public int LogoutMenuNumber = 6;
 
     }

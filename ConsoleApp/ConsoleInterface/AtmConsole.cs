@@ -4,29 +4,29 @@ namespace BAL
 {
     public class AtmConsole
     {
-        private readonly ConsoleColor InfoMessageColor = ConsoleColor.Green;
+        private readonly ConsoleColor infoMessageColor = ConsoleColor.Green;
 
-        private readonly ConsoleColor WarningMessageColor = ConsoleColor.Yellow;
+        private readonly ConsoleColor warningMessageColor = ConsoleColor.Yellow;
 
-        private readonly ConsoleColor ErrorMessageColor = ConsoleColor.Red;
+        private readonly ConsoleColor errorMessageColor = ConsoleColor.Red;
 
-        private readonly ConsoleColor DefaultMessageColor = ConsoleColor.White;
+        private readonly ConsoleColor defaultMessageColor = ConsoleColor.White;
 
-        private readonly char PasswordHideChar = '*';
+        private readonly char passwordHideChar = '*';
 
-        private readonly int DefaultPauseMs;
+        private readonly int defaultPauseMs;
 
-        public AtmConsole(int pause) { DefaultPauseMs = pause; }
+        public AtmConsole(int pause) { defaultPauseMs = pause; }
 
         public void Write(string message, char messageType = 'd')
         {
             Console.ForegroundColor = messageType switch
             {
-                'i' => InfoMessageColor,
-                'w' => WarningMessageColor,
-                'e' => ErrorMessageColor,
-                'd' => DefaultMessageColor,
-                _ => DefaultMessageColor,
+                'i' => infoMessageColor,
+                'w' => warningMessageColor,
+                'e' => errorMessageColor,
+                'd' => defaultMessageColor,
+                _ => defaultMessageColor,
             };
 
             Console.Write(message);
@@ -48,7 +48,7 @@ namespace BAL
 
         public void Pause()
         {
-            Thread.Sleep(DefaultPauseMs);
+            Thread.Sleep(defaultPauseMs);
         }
 
         public void WaitUser()
@@ -68,45 +68,6 @@ namespace BAL
         public void ClearScreen()
         {
             Console.Clear();
-        }
-
-        private string ReadCredentials(string credentialType)
-        {
-            var credentialString = String.Empty;
-
-            ConsoleKey key;
-
-            do
-            {
-                var readKeyInfo = Console.ReadKey(intercept: true);
-
-                key = readKeyInfo.Key;
-
-                if (key == ConsoleKey.Backspace && credentialString.Length > 0)
-                {
-                    Console.Write("\b \b");
-
-                    credentialString = credentialString[0..^1];
-                }
-                else if (!char.IsControl(readKeyInfo.KeyChar))
-                {
-
-                    if (credentialType == "username")
-                    {
-                        Console.Write(readKeyInfo.KeyChar);
-                    }
-                    else if (credentialType == "password")
-                    {
-                        Console.Write(PasswordHideChar);
-                    }
-
-                    credentialString += readKeyInfo.KeyChar;
-                }
-            } while (key != ConsoleKey.Enter);
-
-            WriteLine();
-
-            return credentialString;
         }
 
         public string ReadUserName()
@@ -171,5 +132,45 @@ namespace BAL
 
             WaitUser();
         }
+
+        private string ReadCredentials(string credentialType)
+        {
+            var credentialString = String.Empty;
+
+            ConsoleKey key;
+
+            do
+            {
+                var readKeyInfo = Console.ReadKey(intercept: true);
+
+                key = readKeyInfo.Key;
+
+                if (key == ConsoleKey.Backspace && credentialString.Length > 0)
+                {
+                    Console.Write("\b \b");
+
+                    credentialString = credentialString[0..^1];
+                }
+                else if (!char.IsControl(readKeyInfo.KeyChar))
+                {
+
+                    if (credentialType == "username")
+                    {
+                        Console.Write(readKeyInfo.KeyChar);
+                    }
+                    else if (credentialType == "password")
+                    {
+                        Console.Write(passwordHideChar);
+                    }
+
+                    credentialString += readKeyInfo.KeyChar;
+                }
+            } while (key != ConsoleKey.Enter);
+
+            WriteLine();
+
+            return credentialString;
+        }
+
     }
 }

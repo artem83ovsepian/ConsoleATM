@@ -1,4 +1,4 @@
-﻿using DAL;
+﻿
 using BAL.Entities;
 
 namespace BAL
@@ -97,14 +97,15 @@ namespace BAL
             return result;
         }
 
+        public decimal GetBalance(int accountId)
+        {
+            return _atmDB.GetAtmAccountBalance(accountId);
+        }
+
         private void SaveBalance(int accountId, decimal accountBalance)
         {
             _atmDB.SaveAtmAccountBalance(accountId, accountBalance);
         }
 
-        public decimal GetBalance(int accountId)
-        {
-            return _atmDB.GetAtmAccountBalance(accountId);
-        }
     }
 }

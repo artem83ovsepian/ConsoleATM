@@ -1,5 +1,4 @@
-﻿using DAL;
-using BAL.Entities;
+﻿using BAL.Entities;
 
 namespace BAL
 {
