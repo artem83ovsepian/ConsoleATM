@@ -15,7 +15,7 @@ namespace BAL
 
         public Account GetAccount(int userId)
         {
-            var atmAccountData = _atmDB.GetAtmUserAccount(userId);
+            var atmAccountData = _atmDB.GetUserAccount(userId);
 
             return new Account
             {                
@@ -40,7 +40,7 @@ namespace BAL
                 }
                 else
                 {
-                    var balance = _atmDB.GetAtmAccountBalance(accountId);
+                    var balance = _atmDB.GetAccountBalance(accountId);
                     balance += decDeposit;
 
                     SaveBalance(accountId, balance);
@@ -51,7 +51,7 @@ namespace BAL
                 result = "Enter valid Deposit number";
             }
 
-            balanceAfter = _atmDB.GetAtmAccountBalance(accountId);
+            balanceAfter = _atmDB.GetAccountBalance(accountId);
 
             return result;
         }
@@ -72,8 +72,8 @@ namespace BAL
                 }
                 else
                 {
-                    var balance = _atmDB.GetAtmAccountBalance(accountId);
-                    var overDraft = _atmDB.GetAtmUserOverdraft(accountId);
+                    var balance = _atmDB.GetAccountBalance(accountId);
+                    var overDraft = _atmDB.GetUserOverdraft(accountId);
 
                     if ((balance - decDeposit) < (-overDraft))
                     {
@@ -92,19 +92,19 @@ namespace BAL
                 result = "Enter valid number";
             }
 
-            balanceAfter = _atmDB.GetAtmAccountBalance(accountId);
+            balanceAfter = _atmDB.GetAccountBalance(accountId);
 
             return result;
         }
 
         public decimal GetBalance(int accountId)
         {
-            return _atmDB.GetAtmAccountBalance(accountId);
+            return _atmDB.GetAccountBalance(accountId);
         }
 
         private void SaveBalance(int accountId, decimal accountBalance)
         {
-            _atmDB.SaveAtmAccountBalance(accountId, accountBalance);
+            _atmDB.SaveAccountBalance(accountId, accountBalance);
         }
 
     }

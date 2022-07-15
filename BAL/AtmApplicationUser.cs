@@ -12,7 +12,7 @@ namespace BAL
 
         public ApplicationUser GetUser(string userName, string password)
         {
-            var atmUserData = _atmDB.GetAtmUser(userName, password);
+            var atmUserData = _atmDB.GetUser(userName, password);
 
             return new ApplicationUser 
             {
@@ -26,7 +26,7 @@ namespace BAL
 
         public decimal GetLimit(int userId)
         {
-            return _atmDB.GetAtmUserOverdraft(userId);
+            return _atmDB.GetUserOverdraft(userId);
         }
     }
 }

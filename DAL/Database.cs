@@ -53,7 +53,7 @@ namespace DAL
             Save();
         }
 
-        public ApplicationUserData GetAtmUser(string userName, string password)
+        public ApplicationUserData GetUser(string userName, string password)
         {
             var userTable = _db.SelectNodes(userNodePathXML);
 
@@ -78,7 +78,7 @@ namespace DAL
 
         }
 
-        public AccountData GetAtmUserAccount(int userId)
+        public AccountData GetUserAccount(int userId)
         {
             var accountTable = _db.SelectNodes(accountNodePathXML);            
 
@@ -103,7 +103,7 @@ namespace DAL
             return _accountData;
         }
 
-        public void SaveAtmAccountBalance(int accountId, decimal balance)
+        public void SaveAccountBalance(int accountId, decimal balance)
         {
             var accountTable = _db.SelectNodes(accountNodePathXML);
 
@@ -201,7 +201,7 @@ namespace DAL
             SetActualUsersCount(-1);
         }
 
-        public decimal GetAtmAccountBalance(int accountId)
+        public decimal GetAccountBalance(int accountId)
         {
             var accountTable = _db.SelectNodes(accountNodePathXML);
 
@@ -218,7 +218,7 @@ namespace DAL
             return balance;
         }
 
-        public decimal GetAtmUserOverdraft(int accountId)
+        public decimal GetUserOverdraft(int accountId)
         {
             decimal overDraft = 0;
 
