@@ -15,18 +15,18 @@ namespace ConsoleATM.ConsoleApp
 
             var atmConsole = new AtmConsole(atmApplication.DelayMS);
 
-            ApplicationUser User;
+            ApplicationUser user;
 
-            Account Account;
+            Account account;
 
 
             while (true)
             {
-                User = AuthinticateUser(atmConsole, atmDatabase);
+                user = AuthinticateUser(atmConsole, atmDatabase);
 
-                if (User.Id > 0)
+                if (user.Id > 0)
                 {
-                    if (User.IsActive != 0)
+                    if (user.IsActive != 0)
                     {
 
                         atmConsole.WriteLine("Login Succeeded.", 'i');
@@ -35,16 +35,16 @@ namespace ConsoleATM.ConsoleApp
                         {
                             atmConsole.WriteLine("Access allowed.", 'i');
 
-                            Account = (new AtmAccount(atmDatabase)).GetAccount(User.Id);
+                            account = (new AtmAccount(atmDatabase)).GetAccount(user.Id);
 
-                            if (Account.Id > 0)
+                            if (account.Id > 0)
                             {
 
                                 atmDatabase.IncrementUserCountWithOne();
 
                                 atmConsole.Pause();
 
-                                WorkWithMainMenu(atmDatabase, atmConsole, User.FullName, Account.Id);
+                                WorkWithMainMenu(atmDatabase, atmConsole, user.FullName, account.Id);
 
                                 atmConsole.WriteLine("Logout", 'i');
 
