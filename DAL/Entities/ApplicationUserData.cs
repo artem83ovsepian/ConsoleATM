@@ -1,4 +1,4 @@
-﻿namespace DAL
+﻿namespace DAL.Entities
 {
     public class ApplicationUserData
     {

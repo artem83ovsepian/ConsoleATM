@@ -1,4 +1,5 @@
 ﻿using System.Xml;
+using DAL.Entities;
 
 namespace DAL
 {
@@ -19,7 +20,7 @@ namespace DAL
 
         private readonly string _datasource;
 
-        private readonly XmlDocument _db;// = new();
+        private readonly XmlDocument _db;
 
         public Database(string dataSource)
         {
@@ -200,7 +201,7 @@ namespace DAL
         {
             var accountTable = _db.SelectNodes(accountNodePathXML);
 
-            decimal balance = 0;
+            var balance = 0m;
 
             foreach (XmlNode account in accountTable)
             {
@@ -215,7 +216,7 @@ namespace DAL
 
         public decimal GetUserOverdraft(int accountId)
         {
-            decimal overDraft = 0;
+            var overDraft = 0m;
 
             var accountTable = _db.SelectNodes(accountNodePathXML);
 

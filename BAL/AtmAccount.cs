@@ -60,8 +60,6 @@ namespace BAL
         {
             var result = "";
 
-            //decimal decDeposit = 0;
-
             try
             {
                 var decDeposit = Math.Round(decimal.Parse(deposit), 2);
