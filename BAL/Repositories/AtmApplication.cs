@@ -1,7 +1,7 @@
 ﻿using DAL;
 using BAL.Entities;
 
-namespace BAL
+namespace BAL.Repositories
 {
     public class AtmApplication
     {
@@ -12,9 +12,9 @@ namespace BAL
             _atmDB = atmDatabase;
         }
 
-        public Application GetApplication()
+        public ApplicationAtm GetApplication()
         {
-            return new Application
+            return new ApplicationAtm
             {
                 AllowedUsersCount = int.Parse(_atmDB.GetApplicationProperty("allowedUsersCount")),
                 ActualUsersCount = int.Parse(_atmDB.GetApplicationProperty("actualUsersCount")),

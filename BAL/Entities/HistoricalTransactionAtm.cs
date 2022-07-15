@@ -1,6 +1,6 @@
 ﻿namespace BAL.Entities
 {
-    public class HistoricalTransaction
+    public class HistoricalTransactionAtm
     {
         public string Type { get; set; }
 

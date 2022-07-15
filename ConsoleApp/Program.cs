@@ -1,11 +1,11 @@
 ﻿using BAL;
 using BAL.Entities;
+using BAL.Repositories;
 
 namespace ConsoleATM.ConsoleApp
 {
     class Program
     {
-        //private ApplicationUser User { get; set; }
 
         public static void Main()
         {
@@ -15,9 +15,9 @@ namespace ConsoleATM.ConsoleApp
 
             var atmConsole = new AtmConsole(atmApplication.DelayMS);
 
-            ApplicationUser user;
+            ApplicationUserAtm user;
 
-            Account account;
+            AccountAtm account;
 
 
             while (true)
@@ -35,7 +35,7 @@ namespace ConsoleATM.ConsoleApp
                         {
                             atmConsole.WriteLine("Access allowed.", 'i');
 
-                            account = (new AtmAccount(atmDatabase)).GetAccount(user.Id);
+                            account = (new AccountAtmRepository()).GetAccount(user.Id);
 
                             if (account.Id > 0)
                             {
@@ -135,7 +135,7 @@ namespace ConsoleATM.ConsoleApp
         {
             atmConsole.Write("Current Balance is: ");
 
-            atmConsole.WriteLine((new AtmAccount(atmDatabase)).GetBalance(accountId).ToString("C"), 'i');
+            atmConsole.WriteLine((new AccountAtmRepository()).GetBalance(accountId).ToString("C"), 'i');
 
             atmConsole.Pause();
         }
@@ -144,7 +144,7 @@ namespace ConsoleATM.ConsoleApp
         {
             atmConsole.Write("Current Cash Withdraw Overdraft is: ");
 
-            atmConsole.WriteLine((new AtmApplicationUser(atmDatabase)).GetLimit(accountId).ToString("C"), 'i');
+            atmConsole.WriteLine((new AccountAtmRepository()).GetUserOverdraft(accountId).ToString("C"), 'i');
 
             atmConsole.Pause();
         }
@@ -165,7 +165,7 @@ namespace ConsoleATM.ConsoleApp
 
             var deposit = Console.ReadLine();
 
-            var operationResult = (new AtmAccount(atmDatabase)).CashWithdraw(atmAccountId, deposit, out decimal balanceAfter);
+            var operationResult = (new AccountAtmRepository()).CashWithdraw(atmAccountId, deposit, out decimal balanceAfter);
 
             if (operationResult != "")
             {
@@ -186,7 +186,7 @@ namespace ConsoleATM.ConsoleApp
 
             var deposit = Console.ReadLine();
 
-            var operationResult = (new AtmAccount(atmDatabase)).CashDeposite(atmAccountId, deposit, out decimal balanceAfter);
+            var operationResult = (new AccountAtmRepository()).CashDeposite(atmAccountId, deposit, out decimal balanceAfter);
 
             if (operationResult != "")
             {
@@ -202,7 +202,7 @@ namespace ConsoleATM.ConsoleApp
             atmConsole.Pause();
         }
 
-        private static ApplicationUser AuthinticateUser(AtmConsole atmConsole, AtmDatabase atmDatabase)
+        private static ApplicationUserAtm AuthinticateUser(AtmConsole atmConsole, AtmDatabase atmDatabase)
         {
             atmConsole.Write("Input username and press Enter: ");
 
@@ -214,7 +214,7 @@ namespace ConsoleATM.ConsoleApp
 
             var atmUser = (new AtmApplicationUser(atmDatabase)).GetUser(inputUserName, inputUserPassword);
 
-            return new ApplicationUser
+            return new ApplicationUserAtm
             {
                 Id = atmUser.Id,
                 Name = atmUser.Name,

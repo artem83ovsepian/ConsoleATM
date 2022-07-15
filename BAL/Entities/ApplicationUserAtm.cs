@@ -1,6 +1,6 @@
 ﻿namespace BAL.Entities
 {
-    public class ApplicationUser
+    public class ApplicationUserAtm
     {
         public int Id { get; set; }
 

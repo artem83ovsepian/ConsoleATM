@@ -1,23 +1,18 @@
-﻿
-using BAL.Entities;
+﻿using BAL.Entities;
+using DAL.Repositories;
 
-namespace BAL
+namespace BAL.Repositories
 {
-    public class AtmAccount
+    public class AccountAtmRepository
     {
 
-        private readonly AtmDatabase _atmDB;
+        private readonly AccountDataRepository _accountDataRepository = new AccountDataRepository();
 
-        public AtmAccount(AtmDatabase atmDatabase) 
+        public AccountAtm GetAccount(int userId)
         {
-            _atmDB = atmDatabase; 
-        }
+            var atmAccountData = _accountDataRepository.GetAccountByUserId(userId);
 
-        public Account GetAccount(int userId)
-        {
-            var atmAccountData = _atmDB.GetUserAccount(userId);
-
-            return new Account
+            return new AccountAtm
             {                
                 Id = atmAccountData.Id,
                 UserId = atmAccountData.UserId,
@@ -40,7 +35,7 @@ namespace BAL
                 }
                 else
                 {
-                    var balance = _atmDB.GetAccountBalance(accountId);
+                    var balance = _accountDataRepository.GetAccountBalance(accountId);
                     balance += decDeposit;
 
                     SaveBalance(accountId, balance);
@@ -51,7 +46,7 @@ namespace BAL
                 result = "Enter valid Deposit number";
             }
 
-            balanceAfter = _atmDB.GetAccountBalance(accountId);
+            balanceAfter = _accountDataRepository.GetAccountBalance(accountId);
 
             return result;
         }
@@ -70,8 +65,8 @@ namespace BAL
                 }
                 else
                 {
-                    var balance = _atmDB.GetAccountBalance(accountId);
-                    var overDraft = _atmDB.GetUserOverdraft(accountId);
+                    var balance = _accountDataRepository.GetAccountBalance(accountId);
+                    var overDraft = _accountDataRepository.GetUserOverdraft(accountId);
 
                     if ((balance - decDeposit) < (-overDraft))
                     {
@@ -90,20 +85,24 @@ namespace BAL
                 result = "Enter valid number";
             }
 
-            balanceAfter = _atmDB.GetAccountBalance(accountId);
+            balanceAfter = _accountDataRepository.GetAccountBalance(accountId);
 
             return result;
         }
 
         public decimal GetBalance(int accountId)
         {
-            return _atmDB.GetAccountBalance(accountId);
+            return _accountDataRepository.GetAccountBalance(accountId);
         }
 
         private void SaveBalance(int accountId, decimal accountBalance)
         {
-            _atmDB.SaveAccountBalance(accountId, accountBalance);
+            _accountDataRepository.SaveAccountBalance(accountId, accountBalance);
         }
 
+        public decimal GetUserOverdraft(int accountId)
+        {
+            return _accountDataRepository.GetUserOverdraft(accountId);
+        }
     }
 }

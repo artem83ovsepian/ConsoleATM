@@ -1,6 +1,6 @@
 ﻿using BAL.Entities;
 
-namespace BAL
+namespace BAL.Repositories
 {
     public class AtmApplicationUser
     {
@@ -10,11 +10,11 @@ namespace BAL
             _atmDB = atmDatabase; 
         }
 
-        public ApplicationUser GetUser(string userName, string password)
+        public ApplicationUserAtm GetUser(string userName, string password)
         {
             var atmUserData = _atmDB.GetUser(userName, password);
 
-            return new ApplicationUser 
+            return new ApplicationUserAtm 
             {
                 Id = atmUserData.Id,
                 Name = atmUserData.Name,
@@ -24,9 +24,5 @@ namespace BAL
             };
         }
 
-        public decimal GetLimit(int userId)
-        {
-            return _atmDB.GetUserOverdraft(userId);
-        }
     }
 }

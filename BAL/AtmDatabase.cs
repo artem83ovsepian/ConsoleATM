@@ -9,13 +9,13 @@ namespace BAL
         {
         }
 
-        public IEnumerable<HistoricalTransaction> GetAtmAccountTransactionHistory(int accountId)
+        public IEnumerable<HistoricalTransactionAtm> GetAtmAccountTransactionHistory(int accountId)
         {
-            var result = new List<HistoricalTransaction>();
+            var result = new List<HistoricalTransactionAtm>();
 
             foreach (var transaction in GetAccountTransactionHistory(accountId))
             {
-                result.Add(new HistoricalTransaction
+                result.Add(new HistoricalTransactionAtm
                 {
                     Type = transaction.Type,
                     CashAmount = transaction.CashAmount,

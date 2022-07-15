@@ -12,7 +12,7 @@ namespace DAL
 
         private readonly string userNodePathXML = "/dbo/UserTable/User";
 
-        private readonly string accountNodePathXML = "/dbo/AccountTable/Account";
+        //private readonly string accountNodePathXML = "/dbo/AccountTable/Account";
 
         private readonly string transactionHistoryNodePathXML = "/dbo/TransactionHistoryTable/Transaction";
 
@@ -77,43 +77,6 @@ namespace DAL
             }
             return atmApplicationUserData;
 
-        }
-
-        public AccountData GetUserAccount(int userId)
-        {
-            var accountTable = _db.SelectNodes(accountNodePathXML);
-            var accountData = new AccountData();
-
-            foreach (XmlNode account in accountTable)
-            {
-                if ((int.Parse(account.Attributes.GetNamedItem("userId").Value!) == userId) && (int.Parse(account.Attributes.GetNamedItem("isActive").Value!) == 1))
-                {
-                    accountData.Id = int.Parse(account.Attributes.GetNamedItem("id").Value!);
-                    accountData.UserId = int.Parse(account.Attributes.GetNamedItem("userId").Value!);
-                    accountData.Balance = decimal.Parse(account.Attributes.GetNamedItem("balance").Value!);
-                    accountData.IsActive = int.Parse(account.Attributes.GetNamedItem("isActive").Value!);
-                    accountData.OverDraft = decimal.Parse(account.Attributes.GetNamedItem("overdraft").Value!);
-                    break;
-                }
-            }
-            return accountData;
-        }
-
-        public void SaveAccountBalance(int accountId, decimal balance)
-        {
-            var accountTable = _db.SelectNodes(accountNodePathXML);
-
-            foreach (XmlNode account in accountTable)
-            {
-                var Id = int.Parse(account.Attributes.GetNamedItem("id").Value!);
-
-                if (Id == accountId)
-                {
-                    account.Attributes.GetNamedItem("balance").Value = balance.ToString();
-                }
-            }
-
-            Save();
         }
 
         public void SaveTransactionHistory (int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy)
@@ -195,42 +158,6 @@ namespace DAL
         public void DecrementUserCountWithOne()
         {
             SetActualUsersCount(-1);
-        }
-
-        public decimal GetAccountBalance(int accountId)
-        {
-            var accountTable = _db.SelectNodes(accountNodePathXML);
-
-            var balance = 0m;
-
-            foreach (XmlNode account in accountTable)
-            {
-                if (int.Parse(account.Attributes.GetNamedItem("id").Value!) == accountId)
-                {
-                    balance = decimal.Parse(account.Attributes.GetNamedItem("balance").Value!);
-                }
-            }
-
-            return balance;
-        }
-
-        public decimal GetUserOverdraft(int accountId)
-        {
-            var overDraft = 0m;
-
-            var accountTable = _db.SelectNodes(accountNodePathXML);
-
-            foreach (XmlNode account in accountTable)
-            {
-                if (int.Parse(account.Attributes.GetNamedItem("id").Value!) == accountId)
-                {
-                    overDraft = decimal.Parse(account.Attributes.GetNamedItem("overdraft").Value!);
-
-                    break;
-                }
-            }
-
-            return overDraft;
         }
 
         private void Save()
