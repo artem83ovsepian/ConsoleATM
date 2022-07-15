@@ -19,13 +19,13 @@ namespace DAL
 
         private readonly string _datasource;
 
-        private readonly XmlDocument _db = new();
-
-        private readonly AccountData _accountData = new();
+        private readonly XmlDocument _db;// = new();
 
         public Database(string dataSource)
         {
             _datasource = dataSource;
+
+            _db = new XmlDocument();
 
             if (_datasource == "xml")
             {
@@ -80,27 +80,22 @@ namespace DAL
 
         public AccountData GetUserAccount(int userId)
         {
-            var accountTable = _db.SelectNodes(accountNodePathXML);            
+            var accountTable = _db.SelectNodes(accountNodePathXML);
+            var accountData = new AccountData();
 
             foreach (XmlNode account in accountTable)
             {
                 if ((int.Parse(account.Attributes.GetNamedItem("userId").Value!) == userId) && (int.Parse(account.Attributes.GetNamedItem("isActive").Value!) == 1))
                 {
-                    _accountData.Id = int.Parse(account.Attributes.GetNamedItem("id").Value!);
-
-                    _accountData.UserId = int.Parse(account.Attributes.GetNamedItem("userId").Value!);
-
-                    _accountData.Balance = decimal.Parse(account.Attributes.GetNamedItem("balance").Value!);
-
-                    _accountData.IsActive = int.Parse(account.Attributes.GetNamedItem("isActive").Value!);
-
-                    _accountData.OverDraft = decimal.Parse(account.Attributes.GetNamedItem("overdraft").Value!);
-
+                    accountData.Id = int.Parse(account.Attributes.GetNamedItem("id").Value!);
+                    accountData.UserId = int.Parse(account.Attributes.GetNamedItem("userId").Value!);
+                    accountData.Balance = decimal.Parse(account.Attributes.GetNamedItem("balance").Value!);
+                    accountData.IsActive = int.Parse(account.Attributes.GetNamedItem("isActive").Value!);
+                    accountData.OverDraft = decimal.Parse(account.Attributes.GetNamedItem("overdraft").Value!);
                     break;
                 }
             }
-
-            return _accountData;
+            return accountData;
         }
 
         public void SaveAccountBalance(int accountId, decimal balance)
