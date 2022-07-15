@@ -8,11 +8,6 @@ namespace DAL
  
         private readonly string dbFile = "XMLData\\ATMdb.xml";
 
-        private readonly string appNodePathXML = "/dbo/Application";
-
-       // private readonly string userNodePathXML = "/dbo/UserTable/User";
-
-        //private readonly string accountNodePathXML = "/dbo/AccountTable/Account";
 
         private readonly string transactionHistoryNodePathXML = "/dbo/TransactionHistoryTable/Transaction";
 
@@ -36,22 +31,6 @@ namespace DAL
             {
                 throw new Exception("Datasource not supported");
             }
-        }
-
-        public string GetApplicationProperty(string propertyName)
-        {
-            var applicationProperties = _db.SelectSingleNode(appNodePathXML);
-
-            return applicationProperties.Attributes.GetNamedItem(propertyName).Value!;
-        }
-
-        public void SetActualUsersCount(int incrementValue)
-        {
-            var applicationProperties = _db.SelectSingleNode(appNodePathXML);
-
-            applicationProperties.Attributes["actualUsersCount"].Value = (int.Parse(GetApplicationProperty("actualUsersCount")) + incrementValue).ToString();
-
-            Save();
         }
 
         public void SaveTransactionHistory (int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy)
@@ -90,7 +69,7 @@ namespace DAL
 
             transactionHistoryTable.AppendChild(newTransaction);
 
-            Save();
+            _db.Save(dbFile);
         }
 
         public IEnumerable<HistoricalTransactionData> GetAccountTransactionHistory(int accountId)
@@ -125,20 +104,6 @@ namespace DAL
             return result;
         }
 
-        public void IncrementUserCountWithOne()
-        {
-            SetActualUsersCount(1);
-        }
-
-        public void DecrementUserCountWithOne()
-        {
-            SetActualUsersCount(-1);
-        }
-
-        private void Save()
-        {
-            _db.Save(dbFile);
-        }
 
     }
 }

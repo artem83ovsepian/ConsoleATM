@@ -3,7 +3,7 @@ using DAL.Repositories;
 
 namespace BAL.Repositories
 {
-    public class AtmApplicationUserRepository
+    public class ApplicationUserAtmRepository
     {
         private readonly ApplicationUserDataRepository _applicationUserDataRepository = new ApplicationUserDataRepository();
 

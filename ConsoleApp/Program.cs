@@ -11,7 +11,7 @@ namespace ConsoleATM.ConsoleApp
         {
             var atmDatabase = new AtmDatabase("xml");
 
-            var atmApplication = (new AtmApplicationRepository(atmDatabase)).GetApplication();
+            var atmApplication = (new ApplicationAtmRepository()).GetApplication();
 
             var atmConsole = new AtmConsole(atmApplication.DelayMS);
 
@@ -40,7 +40,7 @@ namespace ConsoleATM.ConsoleApp
                             if (account.Id > 0)
                             {
 
-                                atmDatabase.IncrementUserCountWithOne();
+                                (new ApplicationAtmRepository()).IncrementUserCountWithOne();
 
                                 atmConsole.Pause();
 
@@ -48,7 +48,7 @@ namespace ConsoleATM.ConsoleApp
 
                                 atmConsole.WriteLine("Logout", 'i');
 
-                                atmDatabase.DecrementUserCountWithOne();
+                                (new ApplicationAtmRepository()).DecrementUserCountWithOne();
                             }
                             else
                             {
@@ -212,7 +212,7 @@ namespace ConsoleATM.ConsoleApp
 
             var inputUserPassword = atmConsole.ReadPassword();
 
-            var atmUser = (new AtmApplicationUserRepository()).GetUser(inputUserName, inputUserPassword);
+            var atmUser = (new ApplicationUserAtmRepository()).GetUser(inputUserName, inputUserPassword);
 
             return new ApplicationUserAtm
             {
