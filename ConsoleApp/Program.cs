@@ -11,7 +11,7 @@ namespace ConsoleATM.ConsoleApp
         {
             var atmDatabase = new AtmDatabase("xml");
 
-            var atmApplication = (new AtmApplication(atmDatabase)).GetApplication();
+            var atmApplication = (new AtmApplicationRepository(atmDatabase)).GetApplication();
 
             var atmConsole = new AtmConsole(atmApplication.DelayMS);
 
@@ -212,7 +212,7 @@ namespace ConsoleATM.ConsoleApp
 
             var inputUserPassword = atmConsole.ReadPassword();
 
-            var atmUser = (new AtmApplicationUser(atmDatabase)).GetUser(inputUserName, inputUserPassword);
+            var atmUser = (new AtmApplicationUserRepository()).GetUser(inputUserName, inputUserPassword);
 
             return new ApplicationUserAtm
             {

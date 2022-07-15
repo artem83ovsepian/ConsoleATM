@@ -3,11 +3,11 @@ using BAL.Entities;
 
 namespace BAL.Repositories
 {
-    public class AtmApplication
+    public class AtmApplicationRepository
     {
         private readonly AtmDatabase _atmDB;
 
-        public AtmApplication(AtmDatabase atmDatabase) 
+        public AtmApplicationRepository(AtmDatabase atmDatabase) 
         { 
             _atmDB = atmDatabase;
         }

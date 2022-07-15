@@ -10,7 +10,7 @@ namespace DAL
 
         private readonly string appNodePathXML = "/dbo/Application";
 
-        private readonly string userNodePathXML = "/dbo/UserTable/User";
+       // private readonly string userNodePathXML = "/dbo/UserTable/User";
 
         //private readonly string accountNodePathXML = "/dbo/AccountTable/Account";
 
@@ -52,31 +52,6 @@ namespace DAL
             applicationProperties.Attributes["actualUsersCount"].Value = (int.Parse(GetApplicationProperty("actualUsersCount")) + incrementValue).ToString();
 
             Save();
-        }
-
-        public ApplicationUserData GetUser(string userName, string password)
-        {
-            var userTable = _db.SelectNodes(userNodePathXML);
-
-            var atmApplicationUserData = new ApplicationUserData();
-
-            foreach (XmlNode user in userTable)
-            {
-                if ((user.Attributes.GetNamedItem("name").Value! == userName) && (user.Attributes.GetNamedItem("password").Value! == password))
-                {
-                    atmApplicationUserData.Name = user.Attributes.GetNamedItem("name").Value!;
-
-                    atmApplicationUserData.Id = int.Parse(user.Attributes.GetNamedItem("id").Value!);
-
-                    atmApplicationUserData.IsActive = int.Parse(user.Attributes.GetNamedItem("isActive").Value!);
-
-                    atmApplicationUserData.FullName = user.Attributes.GetNamedItem("fullName").Value!;
-
-                    break;
-                }
-            }
-            return atmApplicationUserData;
-
         }
 
         public void SaveTransactionHistory (int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy)
