@@ -4,14 +4,7 @@ namespace DAL
 {
     public class Database
     {
-        public Database(string dataSource) 
-        { 
-            Datasource = dataSource; 
-            Init(); 
-        }
-
-        private readonly string Datasource;
-
+ 
         private readonly string dbFile = "XMLData\\ATMdb.xml";
 
         private readonly string appNodePathXML = "/dbo/Application";
@@ -24,38 +17,36 @@ namespace DAL
 
         private readonly string transactionHistoryTablePathXML = "/dbo/TransactionHistoryTable";
 
-        private XmlDocument db = new();
+        private readonly string _datasource;
 
-        private AccountData atmAccountData = new();
+        private readonly XmlDocument _db = new();
 
-        public void Init()
+        private readonly AccountData _accountData = new();
+
+        public Database(string dataSource)
         {
-            if (Datasource == "xml")
+            _datasource = dataSource;
+
+            if (_datasource == "xml")
             {
-                db.Load(dbFile);
+                _db.Load(dbFile);
             }
             else
             {
                 throw new Exception("Datasource not supported");
             }
-
-        }
-
-        private void Save()
-        {
-            db.Save(dbFile);
         }
 
         public string GetApplicationProperty(string propertyName)
         {
-            var applicationProperties = db.SelectSingleNode(appNodePathXML);
+            var applicationProperties = _db.SelectSingleNode(appNodePathXML);
 
             return applicationProperties.Attributes.GetNamedItem(propertyName).Value!;
         }
 
         public void SetActualUsersCount(int incrementValue)
         {
-            var applicationProperties = db.SelectSingleNode(appNodePathXML);
+            var applicationProperties = _db.SelectSingleNode(appNodePathXML);
 
             applicationProperties.Attributes["actualUsersCount"].Value = (int.Parse(GetApplicationProperty("actualUsersCount")) + incrementValue).ToString();
 
@@ -64,7 +55,7 @@ namespace DAL
 
         public ApplicationUserData GetAtmUser(string userName, string password)
         {
-            var userTable = db.SelectNodes(userNodePathXML);
+            var userTable = _db.SelectNodes(userNodePathXML);
 
             var atmApplicationUserData = new ApplicationUserData();
 
@@ -89,32 +80,32 @@ namespace DAL
 
         public AccountData GetAtmUserAccount(int userId)
         {
-            var accountTable = db.SelectNodes(accountNodePathXML);            
+            var accountTable = _db.SelectNodes(accountNodePathXML);            
 
             foreach (XmlNode account in accountTable)
             {
                 if ((int.Parse(account.Attributes.GetNamedItem("userId").Value!) == userId) && (int.Parse(account.Attributes.GetNamedItem("isActive").Value!) == 1))
                 {
-                    atmAccountData.Id = int.Parse(account.Attributes.GetNamedItem("id").Value!);
+                    _accountData.Id = int.Parse(account.Attributes.GetNamedItem("id").Value!);
 
-                    atmAccountData.UserId = int.Parse(account.Attributes.GetNamedItem("userId").Value!);
+                    _accountData.UserId = int.Parse(account.Attributes.GetNamedItem("userId").Value!);
 
-                    atmAccountData.Balance = decimal.Parse(account.Attributes.GetNamedItem("balance").Value!);
+                    _accountData.Balance = decimal.Parse(account.Attributes.GetNamedItem("balance").Value!);
 
-                    atmAccountData.IsActive = int.Parse(account.Attributes.GetNamedItem("isActive").Value!);
+                    _accountData.IsActive = int.Parse(account.Attributes.GetNamedItem("isActive").Value!);
 
-                    atmAccountData.OverDraft = decimal.Parse(account.Attributes.GetNamedItem("overdraft").Value!);
+                    _accountData.OverDraft = decimal.Parse(account.Attributes.GetNamedItem("overdraft").Value!);
 
                     break;
                 }
             }
 
-            return atmAccountData;
+            return _accountData;
         }
 
         public void SaveAtmAccountBalance(int accountId, decimal balance)
         {
-            var accountTable = db.SelectNodes(accountNodePathXML);
+            var accountTable = _db.SelectNodes(accountNodePathXML);
 
             foreach (XmlNode account in accountTable)
             {
@@ -131,37 +122,37 @@ namespace DAL
 
         public void SaveTransactionHistory (int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy)
         {
-            var transactionHistoryTableRecord = db.SelectNodes(transactionHistoryNodePathXML);
+            var transactionHistoryTableRecord = _db.SelectNodes(transactionHistoryNodePathXML);
 
             var transactionTableMaxId = transactionHistoryTableRecord.Count + 1;
 
-            var newTransaction = db.CreateElement("Transaction");
+            var newTransaction = _db.CreateElement("Transaction");
 
-            var attributeId = db.CreateAttribute("id");
+            var attributeId = _db.CreateAttribute("id");
             attributeId.Value = transactionTableMaxId.ToString();
             newTransaction.Attributes.Append(attributeId);
 
-            var attributeaccountId = db.CreateAttribute("accountId");
+            var attributeaccountId = _db.CreateAttribute("accountId");
             attributeaccountId.Value = accountId.ToString();
             newTransaction.Attributes.Append(attributeaccountId);
 
-            var attributeaccountdatetime = db.CreateAttribute("dateTime");
+            var attributeaccountdatetime = _db.CreateAttribute("dateTime");
             attributeaccountdatetime.Value = TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo.Local).ToString();            
             newTransaction.Attributes.Append(attributeaccountdatetime);
 
-            var attributeammount = db.CreateAttribute("ammount");
+            var attributeammount = _db.CreateAttribute("ammount");
             attributeammount.Value = ammount.ToString("0.00");
             newTransaction.Attributes.Append(attributeammount);
 
-            var attributebalanceAfterg = db.CreateAttribute("balanceAfter");
+            var attributebalanceAfterg = _db.CreateAttribute("balanceAfter");
             attributebalanceAfterg.Value = balanceAfter.ToString("0.00");
             newTransaction.Attributes.Append(attributebalanceAfterg);
 
-            var attributemodifiedBy = db.CreateAttribute("modifiedBy");
+            var attributemodifiedBy = _db.CreateAttribute("modifiedBy");
             attributemodifiedBy.Value = modifiedBy;
             newTransaction.Attributes.Append(attributemodifiedBy);
 
-            var transactionHistoryTable = db.SelectSingleNode(transactionHistoryTablePathXML);
+            var transactionHistoryTable = _db.SelectSingleNode(transactionHistoryTablePathXML);
 
             transactionHistoryTable.AppendChild(newTransaction);
 
@@ -173,7 +164,7 @@ namespace DAL
 
             var result = new List<HistoricalTransactionData>();
 
-            var historyTable = db.SelectNodes(transactionHistoryNodePathXML);
+            var historyTable = _db.SelectNodes(transactionHistoryNodePathXML);
 
             foreach (XmlNode record in historyTable)
             {
@@ -212,7 +203,7 @@ namespace DAL
 
         public decimal GetAtmAccountBalance(int accountId)
         {
-            var accountTable = db.SelectNodes(accountNodePathXML);
+            var accountTable = _db.SelectNodes(accountNodePathXML);
 
             decimal balance = 0;
 
@@ -231,7 +222,7 @@ namespace DAL
         {
             decimal overDraft = 0;
 
-            var accountTable = db.SelectNodes(accountNodePathXML);
+            var accountTable = _db.SelectNodes(accountNodePathXML);
 
             foreach (XmlNode account in accountTable)
             {
@@ -244,6 +235,11 @@ namespace DAL
             }
 
             return overDraft;
+        }
+
+        private void Save()
+        {
+            _db.Save(dbFile);
         }
 
     }
