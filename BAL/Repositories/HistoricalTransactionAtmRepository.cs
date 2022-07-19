@@ -25,6 +25,7 @@ namespace BAL.Repositories
             }
             return result;
         }
+        
         public void SaveTransactionHistory(int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy)
         {
             _historicalTransactionDataRepository.SaveTransactionHistory(accountId, dateTime, ammount, balanceAfter, modifiedBy);
