@@ -45,12 +45,8 @@ namespace DAL.Repositories
 
             _applicationProperties.Attributes["actualUsersCount"].Value = (int.Parse(GetApplicationPropertyByName("actualUsersCount")) + incrementValue).ToString();
 
-            Save();
-        }
-
-        private void Save()
-        {
             _xmlDocument.Save(_xmlDb.FileName);
         }
+
     }
 }
