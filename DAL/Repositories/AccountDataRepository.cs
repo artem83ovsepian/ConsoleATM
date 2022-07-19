@@ -48,9 +48,11 @@ namespace DAL.Repositories
                 if (Id == accountId)
                 {
                     account.Attributes.GetNamedItem("balance").Value = balance.ToString();
+                    _xmlDocument.Save(_xmlDb.FileName);
+                    break;
                 }
             }
-            _xmlDocument.Save(_xmlDb.FileName);
+            
         }
 
         public decimal GetAccountBalance(int accountId)

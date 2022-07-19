@@ -1,75 +1,58 @@
 ﻿using System.Xml;
 using DAL.Entities;
+using DAL.Interfaces;
+using DAL.XMLData;
 
-namespace DAL
+namespace DAL.Repositories
 {
-    public class Database
+    public class HistoricalTransactionDataRepository: IHistoricalTransactionDataRepository
     {
- 
-        private readonly string dbFile = "XMLData\\ATMdb.xml";
+        private readonly XMLDb _xmlDb;
+        private readonly XmlDocument _xmlDocument;
+        private readonly XmlNodeList _historyTable;
 
-
-        private readonly string transactionHistoryNodePathXML = "/dbo/TransactionHistoryTable/Transaction";
-
-        private readonly string transactionHistoryTablePathXML = "/dbo/TransactionHistoryTable";
-
-        private readonly string _datasource;
-
-        private readonly XmlDocument _db;
-
-        public Database(string dataSource)
+        public HistoricalTransactionDataRepository()
         {
-            _datasource = dataSource;
-
-            _db = new XmlDocument();
-
-            if (_datasource == "xml")
-            {
-                _db.Load(dbFile);
-            }
-            else
-            {
-                throw new Exception("Datasource not supported");
-            }
+            _xmlDb = new XMLDb();
+            _xmlDocument = new XmlDocument();
+            _xmlDocument.Load(_xmlDb.FileName);
+            _historyTable = _xmlDocument.SelectNodes(_xmlDb.TransactionHistoryNodePathXML);
         }
-
-        public void SaveTransactionHistory (int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy)
+        public void SaveTransactionHistory(int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy)
         {
-            var transactionHistoryTableRecord = _db.SelectNodes(transactionHistoryNodePathXML);
+            var transactionTableMaxId = _historyTable.Count + 1;
 
-            var transactionTableMaxId = transactionHistoryTableRecord.Count + 1;
+            var newTransaction = _xmlDocument.CreateElement("Transaction");
 
-            var newTransaction = _db.CreateElement("Transaction");
-
-            var attributeId = _db.CreateAttribute("id");
+            var attributeId = _xmlDocument.CreateAttribute("id");
             attributeId.Value = transactionTableMaxId.ToString();
             newTransaction.Attributes.Append(attributeId);
 
-            var attributeaccountId = _db.CreateAttribute("accountId");
+            var attributeaccountId = _xmlDocument.CreateAttribute("accountId");
             attributeaccountId.Value = accountId.ToString();
             newTransaction.Attributes.Append(attributeaccountId);
 
-            var attributeaccountdatetime = _db.CreateAttribute("dateTime");
-            attributeaccountdatetime.Value = TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo.Local).ToString();            
+            var attributeaccountdatetime = _xmlDocument.CreateAttribute("dateTime");
+            attributeaccountdatetime.Value = TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo.Local).ToString();
             newTransaction.Attributes.Append(attributeaccountdatetime);
 
-            var attributeammount = _db.CreateAttribute("ammount");
+            var attributeammount = _xmlDocument.CreateAttribute("ammount");
             attributeammount.Value = ammount.ToString("0.00");
             newTransaction.Attributes.Append(attributeammount);
 
-            var attributebalanceAfterg = _db.CreateAttribute("balanceAfter");
+            var attributebalanceAfterg = _xmlDocument.CreateAttribute("balanceAfter");
             attributebalanceAfterg.Value = balanceAfter.ToString("0.00");
             newTransaction.Attributes.Append(attributebalanceAfterg);
 
-            var attributemodifiedBy = _db.CreateAttribute("modifiedBy");
+            var attributemodifiedBy = _xmlDocument.CreateAttribute("modifiedBy");
             attributemodifiedBy.Value = modifiedBy;
             newTransaction.Attributes.Append(attributemodifiedBy);
 
-            var transactionHistoryTable = _db.SelectSingleNode(transactionHistoryTablePathXML);
+            var transactionHistoryTable = _xmlDocument.SelectSingleNode(_xmlDb.TransactionHistoryTablePathXML);
 
             transactionHistoryTable.AppendChild(newTransaction);
 
-            _db.Save(dbFile);
+            _xmlDocument.Save(_xmlDb.FileName);
         }
 
         public IEnumerable<HistoricalTransactionData> GetAccountTransactionHistory(int accountId)
@@ -77,9 +60,7 @@ namespace DAL
 
             var result = new List<HistoricalTransactionData>();
 
-            var historyTable = _db.SelectNodes(transactionHistoryNodePathXML);
-
-            foreach (XmlNode record in historyTable)
+            foreach (XmlNode record in _historyTable)
             {
 
                 if (accountId == int.Parse(record.Attributes.GetNamedItem("accountId").Value!))
@@ -92,10 +73,10 @@ namespace DAL
 
                     transactionData.BalanceBefore = decimal.Parse(record.Attributes.GetNamedItem("balanceAfter").Value) - decimal.Parse(record.Attributes.GetNamedItem("ammount").Value); ;
 
-                    transactionData.BalanceAfter = decimal.Parse(record.Attributes.GetNamedItem("balanceAfter").Value); 
+                    transactionData.BalanceAfter = decimal.Parse(record.Attributes.GetNamedItem("balanceAfter").Value);
 
                     transactionData.Datetime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.Parse(record.Attributes.GetNamedItem("dateTime").Value), TimeZoneInfo.Local);
-                    
+
                     transactionData.UserName = record.Attributes.GetNamedItem("modifiedBy").Value;
 
                     result.Add(transactionData);
@@ -103,7 +84,6 @@ namespace DAL
             }
             return result;
         }
-
 
     }
 }
