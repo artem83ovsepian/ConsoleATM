@@ -20,11 +20,8 @@ namespace DAL.Repositories
             _applicationProperties = _xmlDocument.SelectSingleNode(_xmlDb.AppNodePathXML);
         }
 
-
-
         public string GetApplicationPropertyByName(string propertyName)
         {
-
             return _applicationProperties.Attributes.GetNamedItem(propertyName).Value!;
         }
 
@@ -38,11 +35,8 @@ namespace DAL.Repositories
             SetActualUsersCount(-1);
         }
 
-
         private void SetActualUsersCount(int incrementValue)
         {
-            //var applicationProperties = _db.SelectSingleNode(appNodePathXML);
-
             _applicationProperties.Attributes["actualUsersCount"].Value = (int.Parse(GetApplicationPropertyByName("actualUsersCount")) + incrementValue).ToString();
 
             _xmlDocument.Save(_xmlDb.FileName);
