@@ -1,12 +1,18 @@
 ﻿using BAL.Entities;
 using DAL.Repositories;
+using DAL.Interfaces;
 
 namespace BAL.Repositories
 {
     public class AccountAtmRepository
     {
 
-        private readonly AccountDataRepository _accountDataRepository = new AccountDataRepository();
+        private readonly IAccountDataRepository _accountDataRepository;
+
+        public AccountAtmRepository()
+        {
+            _accountDataRepository = new AccountDataRepository();
+        }
 
         public AccountAtm GetAccount(int userId)
         {

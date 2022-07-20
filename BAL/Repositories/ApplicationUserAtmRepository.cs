@@ -1,11 +1,17 @@
 ﻿using BAL.Entities;
 using DAL.Repositories;
+using DAL.Interfaces;
 
 namespace BAL.Repositories
 {
     public class ApplicationUserAtmRepository
     {
-        private readonly ApplicationUserDataRepository _applicationUserDataRepository = new ApplicationUserDataRepository();
+        private readonly IApplicationUserDataRepository _applicationUserDataRepository;
+
+        public ApplicationUserAtmRepository()
+        {
+            _applicationUserDataRepository = new ApplicationUserDataRepository();
+        }
 
         public ApplicationUserAtm GetUser(string userName, string password)
         {

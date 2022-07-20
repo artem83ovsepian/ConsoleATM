@@ -2,7 +2,7 @@
 
 namespace DAL.Interfaces
 {
-    interface IAccountDataRepository
+    public interface IAccountDataRepository
     {
         AccountData GetAccountByUserId(int userId);
         void SaveAccountBalance(int accountId, decimal balance);

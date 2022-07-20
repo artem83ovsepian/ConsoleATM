@@ -2,7 +2,7 @@
 
 namespace DAL.Interfaces
 {
-    interface IApplicationUserDataRepository
+    public interface IApplicationUserDataRepository
     {
         ApplicationUserData GetUser(string userName, string password);
     }

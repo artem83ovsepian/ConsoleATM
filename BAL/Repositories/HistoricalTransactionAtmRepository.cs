@@ -1,11 +1,17 @@
 ﻿using BAL.Entities;
 using DAL.Repositories;
+using DAL.Interfaces;
 
 namespace BAL.Repositories
 {
     public class HistoricalTransactionAtmRepository
     {
-        private readonly HistoricalTransactionDataRepository _historicalTransactionDataRepository = new HistoricalTransactionDataRepository();
+        private readonly IHistoricalTransactionDataRepository _historicalTransactionDataRepository;
+
+        public HistoricalTransactionAtmRepository()
+        {
+            _historicalTransactionDataRepository = new HistoricalTransactionDataRepository();
+        }
 
         public IEnumerable<HistoricalTransactionAtm> GetAccountTransactionHistory(int accountId)
         {

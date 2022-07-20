@@ -113,17 +113,11 @@ namespace BAL
                 var atmHistoricalTransaction = (HistoricalTransactionAtm)atmHistoricalTransactionEnumerator.Current;
 
                 Write("|" + atmHistoricalTransaction.Type.PadRight(25), 'i');
-
                 Write("|" + atmHistoricalTransaction.CashAmount.ToString("C").PadRight(25), 'i');
-
                 Write("|" + atmHistoricalTransaction.BalanceBefore.ToString("C").PadRight(25), 'i');
-
                 Write("|" + atmHistoricalTransaction.BalanceAfter.ToString("C").PadRight(25), 'i');
-
                 Write("|" + atmHistoricalTransaction.Datetime.ToString().PadRight(25), 'i');
-
                 Write("|" + atmHistoricalTransaction.UserName.PadRight(25), 'i');
-
                 Write("|", 'i');
 
                 WriteLine();
