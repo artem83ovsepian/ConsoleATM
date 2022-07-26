@@ -162,12 +162,8 @@ namespace ConsoleATM.ConsoleApp
 
         private static void WorkWithMainMenuWithdraw(AtmConsole atmConsole, string atmApplicationUserFullName, int atmAccountId)
         {
-            var historicalTransactionAtmRepository = new HistoricalTransactionAtmRepository();
-
             atmConsole.Write("Enter Withdraw Ammount: ");
-
             var deposit = Console.ReadLine();
-
             var operationResult = (new AccountAtmRepository()).CashWithdraw(atmAccountId, deposit, out decimal balanceAfter);
 
             if (operationResult != "")
@@ -176,8 +172,8 @@ namespace ConsoleATM.ConsoleApp
             }
             else
             {
+                var historicalTransactionAtmRepository = new HistoricalTransactionAtmRepository();
                 historicalTransactionAtmRepository.SaveTransactionHistory(atmAccountId, DateTime.Now, Math.Round(decimal.Parse(deposit), 2) * (-1), balanceAfter, atmApplicationUserFullName);
-
                 atmConsole.WriteLine("Operation Successful", 'i');
             }
             atmConsole.Pause();
@@ -185,12 +181,9 @@ namespace ConsoleATM.ConsoleApp
 
         private static void WorkWithMainMenuDeposit(AtmConsole atmConsole, string atmApplicationUserFullName, int atmAccountId)
         {
-            var accountAtmRepository = new AccountAtmRepository();                        
-
+            var accountAtmRepository = new AccountAtmRepository();
             atmConsole.Write("Enter Deposite Ammount: ");
-
             var deposit = Console.ReadLine();
-
             var operationResult = accountAtmRepository.CashDeposite(atmAccountId, deposit, out decimal balanceAfter);
 
             if (operationResult != "")
@@ -200,9 +193,7 @@ namespace ConsoleATM.ConsoleApp
             else
             {
                 var historicalTransactionAtmRepository = new HistoricalTransactionAtmRepository();
-
                 historicalTransactionAtmRepository.SaveTransactionHistory(atmAccountId, DateTime.Now, Math.Round(decimal.Parse(deposit), 2), balanceAfter, atmApplicationUserFullName);
-
                 atmConsole.WriteLine("Operation Successful", 'i');
             }
 

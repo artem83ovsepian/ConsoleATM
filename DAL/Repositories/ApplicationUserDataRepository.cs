@@ -8,22 +8,17 @@ namespace DAL.Repositories
     public class ApplicationUserDataRepository: IApplicationUserDataRepository
     {
         private readonly XMLDb _xmlDb;
-        private readonly XmlDocument _xmlDocument;
-        private readonly XmlNodeList _userTable;
 
         public ApplicationUserDataRepository()
         {
             _xmlDb = new XMLDb();
-            _xmlDocument = new XmlDocument();
-            _xmlDocument.Load(_xmlDb.FileName);
-            _userTable = _xmlDocument.SelectNodes(_xmlDb.UserNodePathXML);
         }
         public ApplicationUserData GetUser(string userName, string password)
         {
 
             var applicationUserData = new ApplicationUserData();
 
-            foreach (XmlNode user in _userTable)
+            foreach (XmlNode user in _xmlDb.UserTable)
             {
                 if ((user.Attributes.GetNamedItem("name").Value! == userName) && (user.Attributes.GetNamedItem("password").Value! == password))
                 {

@@ -8,22 +8,17 @@ namespace DAL.Repositories
     public class AccountDataRepository: IAccountDataRepository
     {
         private readonly XMLDb _xmlDb;
-        private readonly XmlDocument _xmlDocument;
-        private readonly XmlNodeList _accountTable;
 
         public AccountDataRepository()
         {
             _xmlDb = new XMLDb();
-            _xmlDocument = new XmlDocument();
-            _xmlDocument.Load(_xmlDb.FileName);
-            _accountTable = _xmlDocument.SelectNodes(_xmlDb.AccountNodePathXML);
         }        
 
         public AccountData GetAccountByUserId(int userId)
         {
             var accountData = new AccountData();
 
-            foreach (XmlNode account in _accountTable)
+            foreach (XmlNode account in _xmlDb.AccountTable)
             {
                 if ((int.Parse(account.Attributes.GetNamedItem("userId").Value!) == userId) && (int.Parse(account.Attributes.GetNamedItem("isActive").Value!) == 1))
                 {
@@ -41,14 +36,14 @@ namespace DAL.Repositories
         public void SaveAccountBalance(int accountId, decimal balance)
         {
 
-            foreach (XmlNode account in _accountTable)
+            foreach (XmlNode account in _xmlDb.AccountTable)
             {
                 var Id = int.Parse(account.Attributes.GetNamedItem("id").Value!);
 
                 if (Id == accountId)
                 {
                     account.Attributes.GetNamedItem("balance").Value = balance.ToString();
-                    _xmlDocument.Save(_xmlDb.FileName);
+                    _xmlDb.Save();
                     break;
                 }
             }
@@ -59,7 +54,7 @@ namespace DAL.Repositories
         {
             var balance = 0m;
 
-            foreach (XmlNode account in _accountTable)
+            foreach (XmlNode account in _xmlDb.AccountTable)
             {
                 if (int.Parse(account.Attributes.GetNamedItem("id").Value!) == accountId)
                 {
@@ -73,7 +68,7 @@ namespace DAL.Repositories
         {
             var overDraft = 0m;
 
-            foreach (XmlNode account in _accountTable)
+            foreach (XmlNode account in _xmlDb.AccountTable)
             {
                 if (int.Parse(account.Attributes.GetNamedItem("id").Value!) == accountId)
                 {

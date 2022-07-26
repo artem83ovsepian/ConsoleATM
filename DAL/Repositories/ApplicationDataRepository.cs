@@ -1,6 +1,4 @@
-﻿using System.Xml;
-using DAL.Entities;
-using DAL.Interfaces;
+﻿using DAL.Interfaces;
 using DAL.XMLData;
 
 namespace DAL.Repositories
@@ -9,23 +7,15 @@ namespace DAL.Repositories
     {
 
         private readonly XMLDb _xmlDb;
-        private readonly XmlDocument _xmlDocument;
-        private readonly XmlNode _applicationProperties;
 
         public ApplicationDataRepository()
         {
             _xmlDb = new XMLDb();
-            _xmlDocument = new XmlDocument();
-            _xmlDocument.Load(_xmlDb.FileName);
-            _applicationProperties = _xmlDocument.SelectSingleNode(_xmlDb.AppNodePathXML);
         }
-
-
 
         public string GetApplicationPropertyByName(string propertyName)
         {
-
-            return _applicationProperties.Attributes.GetNamedItem(propertyName).Value!;
+            return _xmlDb.ApplicationProperties.Attributes.GetNamedItem(propertyName).Value!;
         }
 
         public void IncrementUserCountWithOne()
@@ -38,14 +28,10 @@ namespace DAL.Repositories
             SetActualUsersCount(-1);
         }
 
-
         private void SetActualUsersCount(int incrementValue)
         {
-            //var applicationProperties = _db.SelectSingleNode(appNodePathXML);
-
-            _applicationProperties.Attributes["actualUsersCount"].Value = (int.Parse(GetApplicationPropertyByName("actualUsersCount")) + incrementValue).ToString();
-
-            _xmlDocument.Save(_xmlDb.FileName);
+            _xmlDb.ApplicationProperties.Attributes["actualUsersCount"].Value = (int.Parse(GetApplicationPropertyByName("actualUsersCount")) + incrementValue).ToString();
+            _xmlDb.Save();
         }
 
     }
