@@ -1,6 +1,7 @@
 ﻿using BAL.Entities;
 using DAL.Repositories;
 using DAL.Interfaces;
+using System.Linq;
 
 namespace BAL.Repositories
 {
@@ -15,21 +16,16 @@ namespace BAL.Repositories
 
         public IEnumerable<HistoricalTransactionAtm> GetAccountTransactionHistory(int accountId)
         {
-            var result = new List<HistoricalTransactionAtm>();
-
-            foreach (var transaction in _historicalTransactionDataRepository.GetAccountTransactionHistory(accountId))
-            {
-                result.Add(new HistoricalTransactionAtm
-                {
-                    Type = transaction.Type,
-                    CashAmount = transaction.CashAmount,
-                    BalanceBefore = transaction.BalanceBefore,
-                    BalanceAfter = transaction.BalanceAfter,
-                    Datetime = transaction.Datetime,
-                    UserName = transaction.UserName
-                });
-            }
-            return result;
+            return (from transaction in _historicalTransactionDataRepository.GetAccountTransactionHistory(accountId)
+                    select new HistoricalTransactionAtm
+                    {
+                        Type = transaction.Type,
+                        CashAmount = transaction.CashAmount,
+                        BalanceBefore = transaction.BalanceBefore,
+                        BalanceAfter = transaction.BalanceAfter,
+                        Datetime = transaction.Datetime,
+                        UserName = transaction.UserName
+                    }).ToList();
         }
         public void SaveTransactionHistory(int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy)
         {

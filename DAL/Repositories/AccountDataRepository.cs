@@ -1,7 +1,7 @@
-﻿using System.Xml;
-using DAL.Entities;
+﻿using DAL.Entities;
 using DAL.Interfaces;
 using DAL.XMLData;
+using System.Xml.Linq;
 
 namespace DAL.Repositories
 {
@@ -12,71 +12,36 @@ namespace DAL.Repositories
         public AccountDataRepository()
         {
             _xmlDb = new XMLDb();
-        }        
+        }
 
         public AccountData GetAccountByUserId(int userId)
-        {
-            var accountData = new AccountData();
+        { 
+            var accountRecord = _xmlDb.Xelement.Descendants("Account").Where(m => (int)m.Attribute("userId") == userId && (int)m.Attribute("isActive") == 1).Take(1).ElementAt(0);
 
-            foreach (XmlNode account in _xmlDb.AccountTable)
+            return new AccountData()
             {
-                if ((int.Parse(account.Attributes.GetNamedItem("userId").Value!) == userId) && (int.Parse(account.Attributes.GetNamedItem("isActive").Value!) == 1))
-                {
-                    accountData.Id = int.Parse(account.Attributes.GetNamedItem("id").Value!);
-                    accountData.UserId = int.Parse(account.Attributes.GetNamedItem("userId").Value!);
-                    accountData.Balance = decimal.Parse(account.Attributes.GetNamedItem("balance").Value!);
-                    accountData.IsActive = int.Parse(account.Attributes.GetNamedItem("isActive").Value!);
-                    accountData.OverDraft = decimal.Parse(account.Attributes.GetNamedItem("overdraft").Value!);
-                    break;
-                }
-            }
-            return accountData;
+                Id = (int)accountRecord.Attribute("id"),
+                UserId = (int)accountRecord.Attribute("userId"),
+                Balance = (decimal)accountRecord.Attribute("balance"),
+                IsActive = (int)accountRecord.Attribute("isActive"),
+                OverDraft = (decimal)accountRecord.Attribute("overdraft")
+            };        
         }
 
         public void SaveAccountBalance(int accountId, decimal balance)
         {
-
-            foreach (XmlNode account in _xmlDb.AccountTable)
-            {
-                var Id = int.Parse(account.Attributes.GetNamedItem("id").Value!);
-
-                if (Id == accountId)
-                {
-                    account.Attributes.GetNamedItem("balance").Value = balance.ToString();
-                    _xmlDb.Save();
-                    break;
-                }
-            }
-            
+            _xmlDb.Xelement.Descendants("Account").Where(m => (int)m.Attribute("id") == accountId).Attributes("balance").ElementAt(0).Value = balance.ToString();
+            _xmlDb.Save();
         }
 
         public decimal GetAccountBalance(int accountId)
         {
-            var balance = 0m;
-
-            foreach (XmlNode account in _xmlDb.AccountTable)
-            {
-                if (int.Parse(account.Attributes.GetNamedItem("id").Value!) == accountId)
-                {
-                    balance = decimal.Parse(account.Attributes.GetNamedItem("balance").Value!);
-                }
-            }
-            return balance;
+            return (decimal)_xmlDb.Xelement.Descendants("Account").Where(m => (int)m.Attribute("id") == accountId).Take(1).ElementAt(0).Attribute("balance");
         }
 
         public decimal GetUserOverdraft(int accountId)
         {
-            var overDraft = 0m;
-
-            foreach (XmlNode account in _xmlDb.AccountTable)
-            {
-                if (int.Parse(account.Attributes.GetNamedItem("id").Value!) == accountId)
-                {
-                    overDraft = decimal.Parse(account.Attributes.GetNamedItem("overdraft").Value!);
-                    break;
-                }
-            }
-            return overDraft;       
+            return (decimal)_xmlDb.Xelement.Descendants("Account").Where(m => (int)m.Attribute("id") == accountId).Take(1).ElementAt(0).Attribute("overdraft");
         }
     }
 }

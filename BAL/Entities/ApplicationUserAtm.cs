@@ -8,8 +8,6 @@
 
         public string FullName { get; set; }
 
-        public int CurrentAccountId { get; set; }
-
         public int IsActive { get; set; }
     }
 }

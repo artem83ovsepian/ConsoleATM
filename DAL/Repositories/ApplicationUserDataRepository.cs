@@ -1,5 +1,4 @@
-﻿using System.Xml;
-using DAL.Entities;
+﻿using DAL.Entities;
 using DAL.Interfaces;
 using DAL.XMLData;
 
@@ -15,22 +14,15 @@ namespace DAL.Repositories
         }
         public ApplicationUserData GetUser(string userName, string password)
         {
+            var userRecord = _xmlDb.Xelement.Descendants("User").Where(m => (string)m.Attribute("name") == userName && (string)m.Attribute("password") == password).Take(1).ElementAt(0);
 
-            var applicationUserData = new ApplicationUserData();
-
-            foreach (XmlNode user in _xmlDb.UserTable)
+            return new ApplicationUserData()
             {
-                if ((user.Attributes.GetNamedItem("name").Value! == userName) && (user.Attributes.GetNamedItem("password").Value! == password))
-                {
-                    applicationUserData.Name = user.Attributes.GetNamedItem("name").Value!;
-                    applicationUserData.Id = int.Parse(user.Attributes.GetNamedItem("id").Value!);
-                    applicationUserData.IsActive = int.Parse(user.Attributes.GetNamedItem("isActive").Value!);
-                    applicationUserData.FullName = user.Attributes.GetNamedItem("fullName").Value!;
-
-                    break;
-                }
-            }
-            return applicationUserData;
+                Name = (string)userRecord.Attribute("name"),
+                Id = (int)userRecord.Attribute("id"),
+                IsActive = (int)userRecord.Attribute("isActive"),
+                FullName = (string)userRecord.Attribute("fullName")
+            };
         }
     }
 }

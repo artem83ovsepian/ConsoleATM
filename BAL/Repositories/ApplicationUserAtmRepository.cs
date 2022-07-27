@@ -22,7 +22,6 @@ namespace BAL.Repositories
                 Id = atmUserData.Id,
                 Name = atmUserData.Name,
                 FullName = atmUserData.FullName,
-                CurrentAccountId = atmUserData.CurrentAccountId,
                 IsActive = atmUserData.IsActive
             };
         }

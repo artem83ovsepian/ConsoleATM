@@ -1,6 +1,7 @@
 ﻿using BAL;
 using BAL.Entities;
 using BAL.Repositories;
+using BAL.Logging;
 
 namespace ConsoleATM.ConsoleApp
 {
@@ -9,7 +10,7 @@ namespace ConsoleATM.ConsoleApp
 
         public static void Main()
         {
-
+            //Console.WriteLine(new TransactionLog().CheckTxtLogFileExists());
             var atmApplication = (new ApplicationAtmRepository()).GetApplication();
 
             var atmConsole = new AtmConsole(atmApplication.DelayMS);
@@ -217,11 +218,8 @@ namespace ConsoleATM.ConsoleApp
                 Id = atmUser.Id,
                 Name = atmUser.Name,
                 FullName = atmUser.FullName,
-                CurrentAccountId = atmUser.CurrentAccountId,
                 IsActive = atmUser.IsActive
             };
-
-            //return atmApplicationUser.GetUser(inputUserName, inputUserPassword);
         }
     }
 
