@@ -23,7 +23,7 @@ namespace BAL.Repositories
                         CashAmount = transaction.CashAmount,
                         BalanceBefore = transaction.BalanceBefore,
                         BalanceAfter = transaction.BalanceAfter,
-                        Datetime = transaction.Datetime,
+                        LogDatetime = transaction.LogDatetime,
                         UserName = transaction.UserName
                     }).ToList();
         }

@@ -2,16 +2,13 @@
 {
     public class HistoricalTransactionData
     {
+        public int Id { get; set; }
+        public int AccountId { get; set; }
         public string Type { get; set; }
-
         public decimal CashAmount { get; set; }
-
         public decimal BalanceBefore { get; set; }
-
         public decimal BalanceAfter { get; set; }
-
-        public DateTime Datetime { get; set; }
-
+        public DateTime LogDatetime { get; set; }
         public string UserName { get; set; }
     }
 }

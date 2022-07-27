@@ -32,15 +32,21 @@ namespace DAL.Repositories
             _xmlDb.Save();
         }
 
+        public IEnumerable<HistoricalTransactionData> GetAccountTransactionHistory()
+        {
+            return GetAccountTransactionHistory(0);
+        }
         public IEnumerable<HistoricalTransactionData> GetAccountTransactionHistory(int accountId)
         {           
-            return (_xmlDb.Xelement.Descendants("Transaction").Where(m => (int)m.Attribute("accountId") == accountId).ToList().Select(record => new HistoricalTransactionData()
+            return (_xmlDb.Xelement.Descendants("Transaction").Where(m => ((int)m.Attribute("accountId") == accountId && accountId != 0) | (accountId == 0)).ToList().Select(record => new HistoricalTransactionData()
             {
+                Id = (int)record.Attribute("id"),
+                AccountId = (int)record.Attribute("accountId"),
                 Type = (decimal)record.Attribute("ammount") > 0 ? "Deposit" : "Withdraw",
                 CashAmount = (decimal)record.Attribute("ammount"),
                 BalanceBefore = (decimal)record.Attribute("balanceAfter") - (decimal)record.Attribute("ammount"),
                 BalanceAfter = (decimal)record.Attribute("balanceAfter"),
-                Datetime = TimeZoneInfo.ConvertTimeFromUtc((DateTime)record.Attribute("dateTime"), TimeZoneInfo.Local),
+                LogDatetime = TimeZoneInfo.ConvertTimeFromUtc((DateTime)record.Attribute("dateTime"), TimeZoneInfo.Local),
                 UserName = (string)record.Attribute("modifiedBy")
             })).ToList();
         }
