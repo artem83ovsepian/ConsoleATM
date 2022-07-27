@@ -27,6 +27,7 @@ namespace BAL.Repositories
                         UserName = transaction.UserName
                     }).ToList();
         }
+        
         public void SaveTransactionHistory(int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy)
         {
             _historicalTransactionDataRepository.SaveTransactionHistory(accountId, dateTime, ammount, balanceAfter, modifiedBy);

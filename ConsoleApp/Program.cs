@@ -10,10 +10,8 @@ namespace ConsoleATM.ConsoleApp
 
         public static void Main()
         {
-
             var atmApplication = (new ApplicationAtmRepository()).GetApplication();
             var atmConsole = new AtmConsole(atmApplication.DelayMS);
-
             ApplicationUserAtm user;
             AccountAtm account;
 
@@ -22,28 +20,21 @@ namespace ConsoleATM.ConsoleApp
             while (true)
             {
                 user = AuthinticateUser(atmConsole);
-
                 if (user.Id > 0)
                 {
                     if (user.IsActive != 0)
                     {
                         atmConsole.WriteLine("Login Succeeded.", 'i');
-
                         if (atmApplication.AllowedUsersCount > atmApplication.ActualUsersCount)
                         {
                             atmConsole.WriteLine("Access allowed.", 'i');
                             account = (new AccountAtmRepository()).GetAccount(user.Id);
-
                             if (account.Id > 0)
                             {
                                 (new ApplicationAtmRepository()).IncrementUserCountWithOne();
-
                                 atmConsole.Pause();
-
                                 WorkWithMainMenu(atmConsole, user.FullName, account.Id);
-
                                 atmConsole.WriteLine("Logout", 'i');
-
                                 (new ApplicationAtmRepository()).DecrementUserCountWithOne();
                             }
                             else
@@ -78,42 +69,32 @@ namespace ConsoleATM.ConsoleApp
             while (true)
             {
                 atmConsole.ClearScreen();
-
                 atmConsole.PrintMenu(atmApplicationMainMenu);
-
-                ConsoleKeyInfo consoleKeyInput; 
-                
+                ConsoleKeyInfo consoleKeyInput;                
                 consoleKeyInput = Console.ReadKey(intercept: true);
-
                 if (char.IsDigit(consoleKeyInput.KeyChar))
                 {
                     var consolKeyNumber = int.Parse(consoleKeyInput.KeyChar.ToString());
-
                     if (consolKeyNumber == atmApplicationMainMenu.BalanceMenuNumber)
                     {
                         WorkWithMainMenuBalance(atmConsole, atmAccountId);
                     }
-
                     if (consolKeyNumber == atmApplicationMainMenu.DepositMenuNumber)
                     {
                         WorkWithMainMenuDeposit(atmConsole, atmApplicationUserFullName, atmAccountId);
                     }
-
                     if (consolKeyNumber == atmApplicationMainMenu.WithdrawMenuNumber)
                     {
                         WorkWithMainMenuWithdraw(atmConsole, atmApplicationUserFullName, atmAccountId);
                     }
-
                     if (consolKeyNumber == atmApplicationMainMenu.HistoryMenuNumber)
                     {
                         WorkWithMainMenuPrintHistory(atmConsole, atmAccountId);
                     }
-
                     if (consolKeyNumber == atmApplicationMainMenu.LimitsMenuNumber)
                     {
                         WorkWithMainMenuLimits( atmConsole, atmAccountId);
                     }
-
                     if (consolKeyNumber == atmApplicationMainMenu.LogoutMenuNumber)
                     {
                         break;
@@ -148,9 +129,7 @@ namespace ConsoleATM.ConsoleApp
         {
             atmConsole.Write("Enter Withdraw Ammount: ");
             var deposit = Console.ReadLine();
-
             var operationResult = (new AccountAtmRepository()).CashWithdraw(atmAccountId, deposit, out decimal balanceAfter);
-
             if (operationResult != "")
             {
                 atmConsole.WriteLine(operationResult, 'w');
@@ -170,9 +149,7 @@ namespace ConsoleATM.ConsoleApp
 
             atmConsole.Write("Enter Deposite Ammount: ");
             var deposit = Console.ReadLine();
-
             var operationResult = accountAtmRepository.CashDeposite(atmAccountId, deposit, out decimal balanceAfter);
-
             if (operationResult != "")
             {
                 atmConsole.WriteLine(operationResult, 'w');
@@ -190,12 +167,9 @@ namespace ConsoleATM.ConsoleApp
         {
             atmConsole.Write("Input username and press Enter: ");
             var inputUserName = atmConsole.ReadUserName();
-
             atmConsole.Write("Input password and press Enter: ");
             var inputUserPassword = atmConsole.ReadPassword();
-
             var atmUser = (new ApplicationUserAtmRepository()).GetUser(inputUserName, inputUserPassword);
-
             return new ApplicationUserAtm
             {
                 Id = atmUser.Id,
@@ -205,6 +179,4 @@ namespace ConsoleATM.ConsoleApp
             };
         }
     }
-
-
 }

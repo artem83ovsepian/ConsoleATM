@@ -101,14 +101,14 @@ namespace BAL.Repositories
             return _accountDataRepository.GetAccountBalance(accountId);
         }
 
-        private void SaveBalance(int accountId, decimal accountBalance)
-        {
-            _accountDataRepository.SaveAccountBalance(accountId, accountBalance);
-        }
-
         public decimal GetUserOverdraft(int accountId)
         {
             return _accountDataRepository.GetUserOverdraft(accountId);
         }
+
+        private void SaveBalance(int accountId, decimal accountBalance)
+        {
+            _accountDataRepository.SaveAccountBalance(accountId, accountBalance);
+        }        
     }
 }

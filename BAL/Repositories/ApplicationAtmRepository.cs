@@ -23,7 +23,6 @@ namespace BAL.Repositories
             _applicationDataRepository.DecrementUserCountWithOne();
         }
 
-
         public ApplicationAtm GetApplication()
         {
             return new ApplicationAtm
