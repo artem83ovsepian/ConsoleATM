@@ -1,21 +1,17 @@
 ﻿using BAL;
 using BAL.Entities;
 using BAL.Repositories;
-using BAL.Logging;
 
 namespace ConsoleATM.ConsoleApp
 {
     class Program
     {
-
         public static void Main()
         {
             var atmApplication = (new ApplicationAtmRepository()).GetApplication();
             var atmConsole = new AtmConsole(atmApplication.DelayMS);
             ApplicationUserAtm user;
             AccountAtm account;
-
-            (new TransactionLog()).RecreateFileIfNotExists();
 
             while (true)
             {

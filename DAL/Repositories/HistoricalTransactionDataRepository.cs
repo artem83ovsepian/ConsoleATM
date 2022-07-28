@@ -2,6 +2,7 @@
 using DAL.Interfaces;
 using DAL.XMLData;
 using System.Xml.Linq;
+using DAL.Logging;
 
 namespace DAL.Repositories
 {
@@ -16,20 +17,34 @@ namespace DAL.Repositories
 
         public void SaveTransactionHistory(int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy)
         {
-            _xmlDb.Xelement.Element("TransactionHistoryTable").Add
-                 (
-                     new XElement
+            var newRecord = new XElement
                          (
-                             "Transaction", 
+                             "Transaction",
                              new XAttribute("id", ((int)_xmlDb.Xelement.Descendants("Transaction").Max(m => (int)m.Attribute("id")) + 1).ToString()),
                              new XAttribute("accountId", accountId.ToString()),
                              new XAttribute("dateTime", TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo.Local).ToString()),
                              new XAttribute("ammount", ammount.ToString("0.00")),
                              new XAttribute("balanceAfter", balanceAfter.ToString("0.00")),
                              new XAttribute("modifiedBy", modifiedBy)
-                         )
-                  );
+                         );
+            _xmlDb.Xelement.Element("TransactionHistoryTable").Add(newRecord);
             _xmlDb.Save();
+            //write to csv transaction log
+            try
+            {
+                (new TransactionLog()).WriteRecord(new List<string>
+                                                            {
+                                                                newRecord.Attribute("id").Value.ToString(),
+                                                                newRecord.Attribute("accountId").Value.ToString(),
+                                                                newRecord.Attribute("dateTime").Value.ToString(),
+                                                                newRecord.Attribute("ammount").Value.ToString(),
+                                                                newRecord.Attribute("balanceAfter").Value.ToString(),
+                                                                newRecord.Attribute("modifiedBy").Value.ToString()
+                                                            });
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         public IEnumerable<HistoricalTransactionData> GetAccountTransactionHistory()

@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Update="Logging\TransactionLog.csv">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
     <None Update="XMLData\ATMdb.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
