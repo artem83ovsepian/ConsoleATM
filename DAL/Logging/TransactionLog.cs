@@ -7,36 +7,21 @@ namespace DAL.Logging
     public class TransactionLog
     {
         private readonly string fileName = "Logging\\TransactionLog.csv";
+
         private readonly IHistoricalTransactionDataRepository _historicalTransactionDataRepository;
-
-        public TransactionLog()
+        private int FileExists
         {
-            _historicalTransactionDataRepository = new HistoricalTransactionDataRepository();            
-        }
-
-        public void WriteRecord(List<string> record)
-        {
-            if (RecreateFileIfNotExists() == 0)
+            get
+            {
+                if (!File.Exists(fileName))
                 {
-                    using (StreamWriter writer = new StreamWriter(fileName, true))
-                    {
-                        writer.WriteLine(string.Join(",", record));
-                    }
-                }
-        }
-
-        private int RecreateFileIfNotExists()
-        {
-            if (!File.Exists(fileName))
-                { 
                     File.Create(fileName).Dispose();
 
-                    List<string> header = new() {"Id", "AccountId", "DateTime", "Ammount", "BalanceAfter", "ModifiedBy"};
-                    WriteRecord(header);
-                //await File.WriteAllLinesAsync(fileName, lines);
+                    WriteRecord(new List<string>() { "Id", "AccountId", "DateTime", "Ammount", "BalanceAfter", "ModifiedBy" });
+
                     foreach (var historicalTransactionData in _historicalTransactionDataRepository.GetAccountTransactionHistory())
-                            {
-                            WriteRecord(new List<string>()
+                    {
+                        WriteRecord(new List<string>()
                                 {
                                     historicalTransactionData.Id.ToString(),
                                     historicalTransactionData.AccountId.ToString(),
@@ -45,10 +30,29 @@ namespace DAL.Logging
                                     historicalTransactionData.BalanceAfter.ToString(),
                                     historicalTransactionData.UserName.ToString()
                                 });
-                            }
-                    return 1;    
+                    }
+                    //await File.WriteAllLinesAsync(fileName, lines);
+                    return 0;
                 }
-            return 0;
+                return 1;
+            }
         }
+
+        public TransactionLog()
+        {
+            _historicalTransactionDataRepository = new HistoricalTransactionDataRepository();            
+        }
+
+        public void WriteRecord(List<string> record)
+        {
+            if (FileExists == 1)
+                {
+                    using (StreamWriter writer = new StreamWriter(fileName, true))
+                    {
+                        writer.WriteLine(string.Join(",", record));
+                    }
+                }
+        }
+
     }
 }
