@@ -11,7 +11,7 @@ namespace BAL.Repositories
 
         public AccountAtmRepository()
         {
-            _accountDataRepository = new AccountDataRepository();
+            _accountDataRepository = new XmlAccountDataRepository();
         }
 
         public AccountAtm GetAccount(int userId)

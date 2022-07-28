@@ -4,11 +4,11 @@ using System.Xml.Linq;
 
 namespace DAL.Repositories
 {
-    public class ApplicationDataRepository: IApplicationDataRepository
+    public class XmlApplicationDataRepository: IApplicationDataRepository
     {
         private readonly XMLDb _xmlDb;
 
-        public ApplicationDataRepository()
+        public XmlApplicationDataRepository()
         {
             _xmlDb = new XMLDb();
         }

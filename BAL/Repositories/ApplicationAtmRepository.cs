@@ -8,9 +8,9 @@ namespace BAL.Repositories
     {
         private readonly IApplicationDataRepository _applicationDataRepository;
 
-        public ApplicationAtmRepository()
+        public ApplicationAtmRepository(string dbType)
         {
-            _applicationDataRepository = new ApplicationDataRepository();
+            _applicationDataRepository = new XmlApplicationDataRepository();
         }
 
         public void IncrementUserCountWithOne()

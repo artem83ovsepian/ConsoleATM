@@ -4,11 +4,11 @@ using DAL.XMLData;
 
 namespace DAL.Repositories
 {
-    public class ApplicationUserDataRepository: IApplicationUserDataRepository
+    public class XmlApplicationUserDataRepository: IApplicationUserDataRepository
     {
         private readonly XMLDb _xmlDb;
 
-        public ApplicationUserDataRepository()
+        public XmlApplicationUserDataRepository()
         {
             _xmlDb = new XMLDb();
         }

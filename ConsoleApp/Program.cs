@@ -6,9 +6,11 @@ namespace ConsoleATM.ConsoleApp
 {
     class Program
     {
-        public static void Main()
+        public static void Main(string[] args)
         {
-            var atmApplication = (new ApplicationAtmRepository()).GetApplication();
+            var dbType = args[0];
+
+            var atmApplication = (new ApplicationAtmRepository(dbType)).GetApplication();
             var atmConsole = new AtmConsole(atmApplication.DelayMS);
             ApplicationUserAtm user;
             AccountAtm account;
@@ -27,11 +29,11 @@ namespace ConsoleATM.ConsoleApp
                             account = (new AccountAtmRepository()).GetAccount(user.Id);
                             if (account.Id > 0)
                             {
-                                (new ApplicationAtmRepository()).IncrementUserCountWithOne();
+                                (new ApplicationAtmRepository(dbType)).IncrementUserCountWithOne();
                                 atmConsole.Pause();
                                 WorkWithMainMenu(atmConsole, user.FullName, account.Id);
                                 atmConsole.WriteLine("Logout", 'i');
-                                (new ApplicationAtmRepository()).DecrementUserCountWithOne();
+                                (new ApplicationAtmRepository(dbType)).DecrementUserCountWithOne();
                             }
                             else
                             {

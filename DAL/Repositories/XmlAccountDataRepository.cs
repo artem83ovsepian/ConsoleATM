@@ -5,11 +5,11 @@ using System.Xml.Linq;
 
 namespace DAL.Repositories
 {
-    public class AccountDataRepository: IAccountDataRepository
+    public class XmlAccountDataRepository: IAccountDataRepository
     {
         private readonly XMLDb _xmlDb;
 
-        public AccountDataRepository()
+        public XmlAccountDataRepository()
         {
             _xmlDb = new XMLDb();
         }

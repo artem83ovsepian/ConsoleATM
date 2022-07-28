@@ -11,7 +11,7 @@ namespace BAL.Repositories
 
         public HistoricalTransactionAtmRepository()
         {
-            _historicalTransactionDataRepository = new HistoricalTransactionDataRepository();
+            _historicalTransactionDataRepository = new XmlHistoricalTransactionDataRepository();
         }
 
         public IEnumerable<HistoricalTransactionAtm> GetAccountTransactionHistory(int accountId)

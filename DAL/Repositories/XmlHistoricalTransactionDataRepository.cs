@@ -6,11 +6,11 @@ using DAL.Logging;
 
 namespace DAL.Repositories
 {
-    public class HistoricalTransactionDataRepository: IHistoricalTransactionDataRepository
+    public class XmlHistoricalTransactionDataRepository: IHistoricalTransactionDataRepository
     {
         private readonly XMLDb _xmlDb;
 
-        public HistoricalTransactionDataRepository()
+        public XmlHistoricalTransactionDataRepository()
         {
             _xmlDb = new XMLDb();
         }

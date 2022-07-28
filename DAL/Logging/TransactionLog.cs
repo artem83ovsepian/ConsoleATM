@@ -40,7 +40,7 @@ namespace DAL.Logging
 
         public TransactionLog()
         {
-            _historicalTransactionDataRepository = new HistoricalTransactionDataRepository();            
+            _historicalTransactionDataRepository = new XmlHistoricalTransactionDataRepository();            
         }
 
         public void WriteRecord(List<string> record)

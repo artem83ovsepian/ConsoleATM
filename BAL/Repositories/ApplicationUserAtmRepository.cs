@@ -10,7 +10,7 @@ namespace BAL.Repositories
 
         public ApplicationUserAtmRepository()
         {
-            _applicationUserDataRepository = new ApplicationUserDataRepository();
+            _applicationUserDataRepository = new XmlApplicationUserDataRepository();
         }
 
         public ApplicationUserAtm GetUser(string userName, string password)
