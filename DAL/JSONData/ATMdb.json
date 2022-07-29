@@ -1,1 +1,97 @@
-﻿
+﻿{
+    "Application": {
+      "AllowedUsersCount": "1",
+      "ActualUsersCount": "0",
+      "DelayMS": "2500"
+    },
+
+    "User": [
+      {
+        "Id": "1",
+        "Name": "user1",
+        "Password": "Password1",
+        "FullName": "User One",
+        "IsActive": "1"
+      },
+      {
+        "Id": "2",
+        "Name": "user2",
+        "Password": "Password2",
+        "FullName": "User Two",
+        "IsActive": "0"
+      },
+      {
+        "Id": "3",
+        "Name": "user3",
+        "Password": "Password3",
+        "FullName": "User Three",
+        "IsActive": "1"
+      }
+    ],
+
+    "Account": [
+      {
+        "Id": "1",
+        "UserId": "1",
+        "Balance": "0.50",
+        "IsActive": "0",
+        "Overdraft": "1000.00"
+      },
+      {
+        "Id": "2",
+        "UserId": "2",
+        "Balance": "100.00",
+        "IsActive": "1",
+        "Overdraft": "1000.00"
+      },
+      {
+        "Id": "3",
+        "UserId": "3",
+        "Balance": "-1000.00",
+        "IsActive": "0",
+        "Overdraft": "1000.00"
+      },
+      {
+        "Id": "4",
+        "UserId": "1",
+        "Balance": "10.25",
+        "IsActive": "1",
+        "Overdraft": "1000.00"
+      }
+    ],
+
+    "Transaction": [
+      {
+        "Id": "1",
+        "AccountId": "4",
+        "DateTime": "6/20/2022 9:09:40 AM",
+        "Ammount": "-60.15",
+        "BalanceAfter": "0.00",
+        "ModifiedBy": "User One"
+      },
+      {
+        "Id": "2",
+        "AccountId": "2",
+        "DateTime": "6/20/2022 9:09:40 PM",
+        "Ammount": "-50.00",
+        "BalanceAfter": "100.00",
+        "ModifiedBy": "User Two"
+      },
+      {
+        "Id": "3",
+        "AccountId": "3",
+        "DateTime": "6/20/2022 9:09:40 PM",
+        "Ammount": "-1000.00",
+        "BalanceAfter": "-1000.00",
+        "ModifiedBy": "User Three"
+      },
+      {
+        "Id": "4",
+        "AccountId": "4",
+        "DateTime": "6/21/2022 18:03:51 PM",
+        "Ammount": "10.25",
+        "BalanceAfter": "10.25",
+        "ModifiedBy": "User One"
+      }
+    ] 
+ }

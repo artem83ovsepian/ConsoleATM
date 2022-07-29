@@ -1,7 +1,6 @@
 ﻿using BAL.Entities;
 using DAL.Repositories;
 using DAL.Interfaces;
-using System.Linq;
 
 namespace BAL.Repositories
 {
@@ -9,9 +8,14 @@ namespace BAL.Repositories
     {
         private readonly IHistoricalTransactionDataRepository _historicalTransactionDataRepository;
 
-        public HistoricalTransactionAtmRepository()
+        public HistoricalTransactionAtmRepository(string dbType)
         {
-            _historicalTransactionDataRepository = new XmlHistoricalTransactionDataRepository();
+            switch (dbType)
+            {
+                case "xml": _historicalTransactionDataRepository = new XmlHistoricalTransactionDataRepository(); break;
+                case "json": _historicalTransactionDataRepository = new JsonHistoricalTransactionDataRepository(); break;
+                default: throw new ArgumentException(nameof(dbType));
+            }
         }
 
         public IEnumerable<HistoricalTransactionAtm> GetAccountTransactionHistory(int accountId)

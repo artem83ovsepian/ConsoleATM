@@ -9,8 +9,13 @@ namespace BAL.Repositories
         private readonly IApplicationDataRepository _applicationDataRepository;
 
         public ApplicationAtmRepository(string dbType)
-        {
-            _applicationDataRepository = new XmlApplicationDataRepository();
+        {            
+            switch (dbType)
+            {
+                case "xml": _applicationDataRepository = new XmlApplicationDataRepository(); break;
+                case "json": _applicationDataRepository = new JsonApplicationDataRepository(); break;
+                    default: throw new ArgumentException(nameof(dbType));
+            }
         }
 
         public void IncrementUserCountWithOne()

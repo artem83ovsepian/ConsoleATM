@@ -9,9 +9,15 @@ namespace BAL.Repositories
 
         private readonly IAccountDataRepository _accountDataRepository;
 
-        public AccountAtmRepository()
+        public AccountAtmRepository(string dbType)
         {
             _accountDataRepository = new XmlAccountDataRepository();
+            switch (dbType)
+            {
+                case "xml": _accountDataRepository = new XmlAccountDataRepository(); break;
+                case "json": _accountDataRepository = new JsonAccountDataRepository(); break;
+                default: throw new ArgumentException(nameof(dbType));
+            }
         }
 
         public AccountAtm GetAccount(int userId)
@@ -101,7 +107,7 @@ namespace BAL.Repositories
             return _accountDataRepository.GetAccountBalance(accountId);
         }
 
-        public decimal GetUserOverdraft(int accountId)
+        public decimal? GetUserOverdraft(int accountId)
         {
             return _accountDataRepository.GetUserOverdraft(accountId);
         }

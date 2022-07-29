@@ -8,9 +8,16 @@ namespace BAL.Repositories
     {
         private readonly IApplicationUserDataRepository _applicationUserDataRepository;
 
-        public ApplicationUserAtmRepository()
+        public ApplicationUserAtmRepository(string dbType)
         {
             _applicationUserDataRepository = new XmlApplicationUserDataRepository();
+
+            switch (dbType)
+            {
+                case "xml": _applicationUserDataRepository = new XmlApplicationUserDataRepository(); break;
+                case "json": _applicationUserDataRepository = new JsonApplicationUserDataRepository(); break;
+                default: throw new ArgumentException(nameof(dbType));
+            }
         }
 
         public ApplicationUserAtm GetUser(string userName, string password)

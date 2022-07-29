@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="Logging\TransactionLog.csv">
+    <None Update="JSONData\ATMdb.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="LoggingCsv\TransactionLog.csv">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="XMLData\ATMdb.xml">

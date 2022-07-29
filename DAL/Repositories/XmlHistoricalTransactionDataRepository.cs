@@ -51,6 +51,7 @@ namespace DAL.Repositories
         {
             return GetAccountTransactionHistory(0);
         }
+        
         public IEnumerable<HistoricalTransactionData> GetAccountTransactionHistory(int accountId)
         {           
             return (_xmlDb.Xelement.Descendants("Transaction").Where(m => ((int)m.Attribute("accountId") == accountId && accountId != 0) | (accountId == 0)).ToList().Select(record => new HistoricalTransactionData()

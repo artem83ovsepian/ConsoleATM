@@ -30,18 +30,18 @@ namespace DAL.Repositories
 
         public void SaveAccountBalance(int accountId, decimal balance)
         {
-            _xmlDb.Xelement.Descendants("Account").Where(m => (int)m.Attribute("id") == accountId).Attributes("balance").ElementAt(0).Value = balance.ToString();
+            _xmlDb.Xelement.Descendants("Account").FirstOrDefault(m => (int)m.Attribute("id") == accountId).Attributes("balance").ElementAt(0).Value = balance.ToString();
             _xmlDb.Save();
         }
 
         public decimal GetAccountBalance(int accountId)
         {
-            return (decimal)_xmlDb.Xelement.Descendants("Account").Where(m => (int)m.Attribute("id") == accountId).Take(1).ElementAt(0).Attribute("balance");
+            return (decimal)_xmlDb.Xelement.Descendants("Account").FirstOrDefault(m => (int)m.Attribute("id") == accountId).Attribute("balance");
         }
 
-        public decimal GetUserOverdraft(int accountId)
+        public decimal? GetUserOverdraft(int accountId)
         {
-            return (decimal)_xmlDb.Xelement.Descendants("Account").Where(m => (int)m.Attribute("id") == accountId).Take(1).ElementAt(0).Attribute("overdraft");
+            return (decimal?)_xmlDb.Xelement.Descendants("Account").FirstOrDefault(m => (int)m.Attribute("id") == accountId)?.Attribute("overdraft");
         }
     }
 }
