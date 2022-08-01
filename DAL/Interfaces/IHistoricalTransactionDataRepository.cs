@@ -7,7 +7,7 @@ namespace DAL.Interfaces
     {
         IEnumerable<HistoricalTransactionData> GetAccountTransactionHistory(int accountId);
         IEnumerable<HistoricalTransactionData> GetAccountTransactionHistory();
-        void SaveTransactionHistory(int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy);
+        int SaveTransactionHistory(int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy);
     }
 
 }

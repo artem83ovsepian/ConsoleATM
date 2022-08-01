@@ -1,12 +1,15 @@
 ﻿using BAL.Entities;
 using DAL.Repositories;
 using DAL.Interfaces;
+using BAL.Logging;
 
 namespace BAL.Repositories
 {
     public class HistoricalTransactionAtmRepository
     {
         private readonly IHistoricalTransactionDataRepository _historicalTransactionDataRepository;
+
+        private string _dbType;
 
         public HistoricalTransactionAtmRepository(string dbType)
         {
@@ -16,6 +19,7 @@ namespace BAL.Repositories
                 case "json": _historicalTransactionDataRepository = new JsonHistoricalTransactionDataRepository(); break;
                 default: throw new ArgumentException(nameof(dbType));
             }
+            _dbType = dbType;
         }
 
         public IEnumerable<HistoricalTransactionAtm> GetAccountTransactionHistory(int accountId)
@@ -34,7 +38,24 @@ namespace BAL.Repositories
         
         public void SaveTransactionHistory(int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy)
         {
-            _historicalTransactionDataRepository.SaveTransactionHistory(accountId, dateTime, ammount, balanceAfter, modifiedBy);
+            var transactionLogId = _historicalTransactionDataRepository.SaveTransactionHistory(accountId, dateTime, ammount, balanceAfter, modifiedBy);
+
+            //write to csv transaction log file
+            try
+            {
+                (new TransactionLog(_dbType)).WriteRecord(new List<string>
+                                                            {
+                                                                transactionLogId.ToString(),
+                                                                accountId.ToString(),
+                                                                TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo.Local).ToString(),
+                                                                ammount.ToString("0.00"),
+                                                                balanceAfter.ToString("0.00"),
+                                                                modifiedBy
+                                                            });
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
     }

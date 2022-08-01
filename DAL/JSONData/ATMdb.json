@@ -9,21 +9,21 @@
       {
         "Id": "1",
         "Name": "user1",
-        "Password": "Password1",
+        "Password": "password1",
         "FullName": "User One",
         "IsActive": "1"
       },
       {
         "Id": "2",
         "Name": "user2",
-        "Password": "Password2",
+        "Password": "password2",
         "FullName": "User Two",
         "IsActive": "0"
       },
       {
         "Id": "3",
         "Name": "user3",
-        "Password": "Password3",
+        "Password": "password3",
         "FullName": "User Three",
         "IsActive": "1"
       }

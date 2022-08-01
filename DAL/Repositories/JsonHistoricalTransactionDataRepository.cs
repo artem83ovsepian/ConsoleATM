@@ -1,7 +1,6 @@
 ﻿using DAL.JSONData;
 using DAL.Interfaces;
 using DAL.Entities;
-using DAL.Logging;
 
 namespace DAL.Repositories
 {
@@ -14,11 +13,12 @@ namespace DAL.Repositories
             _jsonDb = new JSONDb();
         }
 
-        public void SaveTransactionHistory(int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy)
+        public int SaveTransactionHistory(int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy)
         {
+            var result = _jsonDb.DbRoot.Transaction.Max(m => int.Parse(m.Id) + 1);
             var newRecord = new Transaction()
             {
-                Id = _jsonDb.DbRoot.Transaction.Max(m => int.Parse(m.Id) + 1).ToString(),
+                Id = result.ToString(),
                 AccountId = accountId.ToString(),
                 DateTime = TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo.Local).ToString(),
                 Ammount = ammount.ToString("0.00"),
@@ -29,22 +29,7 @@ namespace DAL.Repositories
             _jsonDb.DbRoot.Transaction.Add(newRecord);            
             _jsonDb.Save();
 
-            //write to csv transaction log
-            try
-            {
-                (new TransactionLog()).WriteRecord(new List<string>
-                                                            {
-                                                                newRecord.Id,
-                                                                newRecord.AccountId,
-                                                                newRecord.DateTime,
-                                                                newRecord.Ammount,
-                                                                newRecord.BalanceAfter,
-                                                                newRecord.ModifiedBy
-                                                            });
-            }
-            catch (Exception ex)
-            {
-            }
+            return result;
         }
 
         public IEnumerable<HistoricalTransactionData> GetAccountTransactionHistory()

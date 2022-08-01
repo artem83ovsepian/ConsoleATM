@@ -2,7 +2,7 @@
   "profiles": {
     "ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": "xml json"
+      "commandLineArgs": "json xml"
     }
   }
 }

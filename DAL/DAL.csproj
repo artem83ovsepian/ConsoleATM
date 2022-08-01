@@ -10,9 +10,6 @@
     <None Update="JSONData\ATMdb.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="LoggingCsv\TransactionLog.csv">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
     <None Update="XMLData\ATMdb.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -2,13 +2,24 @@
 using DAL.Interfaces;
 
 
-namespace DAL.Logging
+namespace BAL.Logging
 {
     public class TransactionLog
     {
         private readonly string fileName = "Logging\\TransactionLog.csv";
 
         private readonly IHistoricalTransactionDataRepository _historicalTransactionDataRepository;
+
+        public TransactionLog(string dbType)
+        {
+            _historicalTransactionDataRepository = new XmlHistoricalTransactionDataRepository();
+            switch (dbType)
+            {
+                case "xml": _historicalTransactionDataRepository = new XmlHistoricalTransactionDataRepository(); break;
+                case "json": _historicalTransactionDataRepository = new JsonHistoricalTransactionDataRepository(); break;
+                default: throw new ArgumentException(nameof(dbType));
+            }
+        }
         private int FileExists
         {
             get
@@ -38,10 +49,7 @@ namespace DAL.Logging
             }
         }
 
-        public TransactionLog()
-        {
-            _historicalTransactionDataRepository = new XmlHistoricalTransactionDataRepository();            
-        }
+
 
         public void WriteRecord(List<string> record)
         {
