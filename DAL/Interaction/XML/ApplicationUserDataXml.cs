@@ -14,7 +14,7 @@ namespace DAL.Interaction.XML
         }
         public ApplicationUserData GetUser(string userName, string password)
         {
-            var userRecord = _xmlDb.Xelement.Descendants("User").Where(m => (string)m.Attribute("name") == userName && (string)m.Attribute("password") == password).Take(1).ElementAt(0);
+            var userRecord = _xmlDb.Xelement.Descendants("User").Where(m => ((string)m.Attribute("name")).ToLower() == userName.ToLower() && (string)m.Attribute("password") == password).Take(1).ElementAt(0);
 
             return new ApplicationUserData()
             {

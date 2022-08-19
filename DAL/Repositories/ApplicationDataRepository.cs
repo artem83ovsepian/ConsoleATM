@@ -1,5 +1,4 @@
-﻿using DAL.Entities;
-using DAL.Interfaces;
+﻿using DAL.Interfaces;
 using DAL.Interaction.JSON;
 using DAL.Interaction.XML;
 

@@ -29,23 +29,6 @@ namespace BAL.Repositories
         public void SaveTransactionHistory(int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy)
         {
             var transactionLogId = _historicalTransactionDataRepository.SaveTransactionHistory(accountId, dateTime, ammount, balanceAfter, modifiedBy);
-
-            //write to csv transaction log file
-            //try
-            //{
-            //    (new TransactionLog(_dbType)).WriteRecord(new List<string>
-            //                                                {
-            //                                                    transactionLogId.ToString(),
-            //                                                    accountId.ToString(),
-            //                                                    TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo.Local).ToString(),
-            //                                                    ammount.ToString("0.00"),
-            //                                                    balanceAfter.ToString("0.00"),
-            //                                                    modifiedBy
-            //                                                });
-            //}
-            //catch (Exception ex)
-            //{
-            //}
         }
 
     }

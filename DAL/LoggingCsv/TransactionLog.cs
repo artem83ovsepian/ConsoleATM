@@ -1,14 +1,12 @@
-﻿using DAL.Entities;
-using DAL.Interfaces;
+﻿using DAL.Interfaces;
 using DAL.Interaction.JSON;
 using DAL.Interaction.XML;
 
-namespace BAL.Logging
+namespace DAL.Logging
 {
     public class TransactionLog
     {
         private readonly string fileName = "Logging\\TransactionLog.csv";
-
 
         private readonly IHistoricalTransactionData _historicalTransactionData;
         public TransactionLog(string dbSource)
@@ -21,15 +19,23 @@ namespace BAL.Logging
             }
         }
 
-        private int FileExists()
+        public void WriteRecord(List<string> record)
         {
-           if (!File.Exists(fileName))
+            if (FileExists(fileName) == 1)
+            {
+                FileWriteLine(record);
+            }
+        }
+
+        private int FileExists(string logFileName)
+        {
+           if (!File.Exists(logFileName))
            {
-               File.Create(fileName).Dispose();
+               File.Create(logFileName).Dispose();
 
                 FileWriteLine(new List<string>() { "Id", "AccountId", "DateTime", "Ammount", "BalanceAfter", "ModifiedBy" });
 
-               foreach (var historicalTransactionData in _historicalTransactionData.GetAccountTransactionHistory())
+                foreach (var historicalTransactionData in _historicalTransactionData.GetAccountTransactionHistory())
                {
                     FileWriteLine(new List<string>()
                            {
@@ -54,15 +60,5 @@ namespace BAL.Logging
                 writer.WriteLine(string.Join(",", record));
             }
         }
-
-
-        public void WriteRecord(List<string> record)
-        {
-            if (FileExists() == 1)
-                {
-                    FileWriteLine(record);
-                }
-        }
-
     }
 }

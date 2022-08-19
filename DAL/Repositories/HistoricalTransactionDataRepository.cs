@@ -2,12 +2,14 @@
 using DAL.Interfaces;
 using DAL.Interaction.JSON;
 using DAL.Interaction.XML;
+using DAL.Logging;
 
 namespace DAL.Repositories
 {
     public class HistoricalTransactionDataRepository
     {
         private readonly IHistoricalTransactionData _historicalTransactionData;
+        private string _dbSource;
         public HistoricalTransactionDataRepository(string dbSource)
         {
             switch (dbSource)
@@ -16,6 +18,7 @@ namespace DAL.Repositories
                 case "json": _historicalTransactionData = new HistoricalTransactionDataJson(); break;
                 default: throw new ArgumentException(nameof(dbSource));
             }
+            _dbSource = dbSource;
         }
         public IEnumerable<HistoricalTransactionData> GetAccountTransactionHistory(int accountId)
         {
@@ -27,7 +30,20 @@ namespace DAL.Repositories
         }
         public int SaveTransactionHistory(int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy)
         {
-            return _historicalTransactionData.SaveTransactionHistory(accountId, dateTime, ammount, balanceAfter, modifiedBy);
+            var transactionLogId = _historicalTransactionData.SaveTransactionHistory(accountId, dateTime, ammount, balanceAfter, modifiedBy);
+            //save to csv
+            var transactionLog = new TransactionLog(_dbSource);
+            transactionLog.WriteRecord(new List<string>
+                                       {
+                                           transactionLogId.ToString(),
+                                           accountId.ToString(),
+                                           TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo.Local).ToString(),
+                                           ammount.ToString("0.00"),
+                                           balanceAfter.ToString("0.00"),
+                                           modifiedBy
+                                       });
+
+            return transactionLogId;
         }
     }
 }
