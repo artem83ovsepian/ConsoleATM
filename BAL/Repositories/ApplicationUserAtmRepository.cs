@@ -1,23 +1,15 @@
 ﻿using BAL.Entities;
 using DAL.Repositories;
-using DAL.Interfaces;
 
 namespace BAL.Repositories
 {
     public class ApplicationUserAtmRepository
     {
-        private readonly IApplicationUserDataRepository _applicationUserDataRepository;
+        private readonly ApplicationUserDataRepository _applicationUserDataRepository;
 
         public ApplicationUserAtmRepository(string dbType)
         {
-            _applicationUserDataRepository = new XmlApplicationUserDataRepository();
-
-            switch (dbType)
-            {
-                case "xml": _applicationUserDataRepository = new XmlApplicationUserDataRepository(); break;
-                case "json": _applicationUserDataRepository = new JsonApplicationUserDataRepository(); break;
-                default: throw new ArgumentException(nameof(dbType));
-            }
+            _applicationUserDataRepository = new ApplicationUserDataRepository(dbType);
         }
 
         public ApplicationUserAtm GetUser(string userName, string password)

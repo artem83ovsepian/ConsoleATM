@@ -2,13 +2,13 @@
 using DAL.Interfaces;
 using DAL.XMLData;
 
-namespace DAL.Repositories
+namespace DAL.Interaction.XML
 {
-    public class XmlApplicationUserDataRepository: IApplicationUserDataRepository
+    public class ApplicationUserDataXml: IApplicationUserData
     {
         private readonly XMLDb _xmlDb;
 
-        public XmlApplicationUserDataRepository()
+        public ApplicationUserDataXml()
         {
             _xmlDb = new XMLDb();
         }

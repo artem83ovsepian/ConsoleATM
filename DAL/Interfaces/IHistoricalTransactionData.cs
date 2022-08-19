@@ -3,7 +3,7 @@
 
 namespace DAL.Interfaces
 {
-    public interface IHistoricalTransactionDataRepository
+    public interface IHistoricalTransactionData
     {
         IEnumerable<HistoricalTransactionData> GetAccountTransactionHistory(int accountId);
         IEnumerable<HistoricalTransactionData> GetAccountTransactionHistory();

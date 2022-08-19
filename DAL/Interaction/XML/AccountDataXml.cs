@@ -3,13 +3,13 @@ using DAL.Interfaces;
 using DAL.XMLData;
 using System.Xml.Linq;
 
-namespace DAL.Repositories
+namespace DAL.Interaction.XML
 {
-    public class XmlAccountDataRepository: IAccountDataRepository
+    public class AccountDataXml: IAccountData
     {
         private readonly XMLDb _xmlDb;
 
-        public XmlAccountDataRepository()
+        public AccountDataXml()
         {
             _xmlDb = new XMLDb();
         }

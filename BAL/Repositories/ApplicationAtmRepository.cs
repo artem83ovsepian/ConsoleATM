@@ -1,21 +1,15 @@
 ﻿using BAL.Entities;
 using DAL.Repositories;
-using DAL.Interfaces;
 
 namespace BAL.Repositories
 {
     public class ApplicationAtmRepository
     {
-        private readonly IApplicationDataRepository _applicationDataRepository;
+        private readonly ApplicationDataRepository _applicationDataRepository;
 
         public ApplicationAtmRepository(string dbType)
-        {            
-            switch (dbType)
-            {
-                case "xml": _applicationDataRepository = new XmlApplicationDataRepository(); break;
-                case "json": _applicationDataRepository = new JsonApplicationDataRepository(); break;
-                    default: throw new ArgumentException(nameof(dbType));
-            }
+        {
+            _applicationDataRepository = new ApplicationDataRepository(dbType);
         }
 
         public void IncrementUserCountWithOne()

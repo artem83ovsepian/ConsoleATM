@@ -3,13 +3,13 @@ using DAL.Interfaces;
 using DAL.Entities;
 
 
-namespace DAL.Repositories
+namespace DAL.Interaction.JSON
 {
-    public class JsonApplicationUserDataRepository : IApplicationUserDataRepository
+    public class ApplicationUserDataJson : IApplicationUserData
     {
         private readonly JSONDb _jsonDb;
 
-        public JsonApplicationUserDataRepository()
+        public ApplicationUserDataJson()
         {
             _jsonDb = new JSONDb();
         }

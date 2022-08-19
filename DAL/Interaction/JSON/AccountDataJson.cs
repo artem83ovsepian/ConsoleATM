@@ -2,13 +2,13 @@
 using DAL.Interfaces;
 using DAL.Entities;
 
-namespace DAL.Repositories
+namespace DAL.Interaction.JSON
 {
-    public class JsonAccountDataRepository: IAccountDataRepository
+    public class AccountDataJson: IAccountData
     {
         private readonly JSONDb _jsonDb;
 
-        public JsonAccountDataRepository()
+        public AccountDataJson()
         {
             _jsonDb = new JSONDb();
         }

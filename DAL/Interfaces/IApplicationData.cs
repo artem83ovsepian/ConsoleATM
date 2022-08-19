@@ -2,7 +2,7 @@
 
 namespace DAL.Interfaces
 {
-    public interface IApplicationDataRepository
+    public interface IApplicationData
     {
         string GetApplicationPropertyByName(string propertyName);
         void IncrementUserCountWithOne();

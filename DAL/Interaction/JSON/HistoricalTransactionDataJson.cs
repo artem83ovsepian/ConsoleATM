@@ -2,13 +2,13 @@
 using DAL.Interfaces;
 using DAL.Entities;
 
-namespace DAL.Repositories
+namespace DAL.Interaction.JSON
 {
-    public class JsonHistoricalTransactionDataRepository : IHistoricalTransactionDataRepository
+    public class HistoricalTransactionDataJson : IHistoricalTransactionData
     {
         private readonly JSONDb _jsonDb;
 
-        public JsonHistoricalTransactionDataRepository()
+        public HistoricalTransactionDataJson()
         {
             _jsonDb = new JSONDb();
         }
