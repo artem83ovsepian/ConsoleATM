@@ -1,24 +1,14 @@
 ﻿using DAL.Entities;
-using DAL.Interfaces;
-using DAL.Interaction.JSON;
-using DAL.Interaction.XML;
-using DAL.Logging;
+using DAL.Repositories.Logging.Csv;
+using DAL.RepositoriesBase;
 
 namespace DAL.Repositories
 {
-    public class HistoricalTransactionDataRepository
+ 
+    public class HistoricalTransactionDataRepository : HistoricalTransactionDataRepositoryBase
     {
-        private readonly IHistoricalTransactionData _historicalTransactionData;
-        private string _dbSource;
-        public HistoricalTransactionDataRepository(string dbSource)
+        public HistoricalTransactionDataRepository(string dbSource) : base(dbSource)
         {
-            switch (dbSource)
-            {
-                case "xml": _historicalTransactionData = new HistoricalTransactionDataXml(); break;
-                case "json": _historicalTransactionData = new HistoricalTransactionDataJson(); break;
-                default: throw new ArgumentException(nameof(dbSource));
-            }
-            _dbSource = dbSource;
         }
         public IEnumerable<HistoricalTransactionData> GetAccountTransactionHistory(int accountId)
         {
@@ -31,7 +21,7 @@ namespace DAL.Repositories
         public int SaveTransactionHistory(int accountId, DateTime dateTime, decimal ammount, decimal balanceAfter, string modifiedBy)
         {
             var transactionLogId = _historicalTransactionData.SaveTransactionHistory(accountId, dateTime, ammount, balanceAfter, modifiedBy);
-            //save to csv
+
             var transactionLog = new TransactionLog(_dbSource);
             transactionLog.WriteRecord(new List<string>
                                        {

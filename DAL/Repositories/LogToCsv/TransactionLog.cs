@@ -1,22 +1,11 @@
-﻿using DAL.Interfaces;
-using DAL.Interaction.JSON;
-using DAL.Interaction.XML;
+﻿using DAL.RepositoriesBase.Logging.Csv;
 
-namespace DAL.Logging
+namespace DAL.Repositories.Logging.Csv
 {
-    public class TransactionLog
+    public class TransactionLog : TransactionLogBase
     {
-        private readonly string fileName = "Logging\\TransactionLog.csv";
-
-        private readonly IHistoricalTransactionData _historicalTransactionData;
-        public TransactionLog(string dbSource)
+        public TransactionLog(string dbSource) : base(dbSource)
         {
-            switch (dbSource)
-            {
-                case "xml": _historicalTransactionData = new HistoricalTransactionDataXml(); break;
-                case "json": _historicalTransactionData = new HistoricalTransactionDataJson(); break;
-                default: throw new ArgumentException(nameof(dbSource));
-            }
         }
 
         public void WriteRecord(List<string> record)

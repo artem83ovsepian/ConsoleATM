@@ -1,21 +1,13 @@
 ﻿using DAL.Entities;
-using DAL.Interfaces;
-using DAL.Interaction.JSON;
-using DAL.Interaction.XML;
+using DAL.RepositoriesBase;
+
 
 namespace DAL.Repositories
 {
-    public class AccountDataRepository
+    public class AccountDataRepository : AccountDataRepositoryBase
     {
-        private readonly IAccountData _accountData;
-        public AccountDataRepository(string dbSource)
+        public AccountDataRepository(string dbSource) : base(dbSource)
         {
-            switch (dbSource)
-            {
-                case "xml": _accountData = new AccountDataXml(); break;
-                case "json": _accountData = new AccountDataJson(); break;
-                default: throw new ArgumentException(nameof(dbSource));
-            }
         }
         public AccountData GetAccountByUserId(int userId)
         {

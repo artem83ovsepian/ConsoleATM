@@ -1,20 +1,11 @@
-﻿using DAL.Interfaces;
-using DAL.Interaction.JSON;
-using DAL.Interaction.XML;
+﻿using DAL.RepositoriesBase;
 
 namespace DAL.Repositories
 {
-    public class ApplicationDataRepository
+    public class ApplicationDataRepository : ApplicationDataRepositoryBase
     {
-        private readonly IApplicationData _applicationData;
-        public ApplicationDataRepository(string dbSource)
+        public ApplicationDataRepository(string dbSource) : base(dbSource)
         {
-            switch (dbSource)
-            {
-                case "xml": _applicationData = new ApplicationDataXml(); break;
-                case "json": _applicationData = new ApplicationDataJson(); break;
-                default: throw new ArgumentException(nameof(dbSource));
-            }
         }
         public string GetApplicationPropertyByName(string propertyName)
         {
