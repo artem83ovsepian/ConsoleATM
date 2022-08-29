@@ -13,7 +13,7 @@ namespace DAL.Interaction.JSON
             _jsonDb = new JSONDb();
         }
 
-        public AccountData GetAccountByUserId(int userId)
+        public AccountData GetAccount(int userId)
         {
             var accountRecord = _jsonDb.DbRoot.Account.Where(p => p.UserId == userId.ToString() && p.IsActive == "1").LastOrDefault();
 

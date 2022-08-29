@@ -1,4 +1,5 @@
 ﻿using DAL.RepositoriesBase;
+using DAL.Entities;
 
 namespace DAL.Repositories
 {
@@ -7,9 +8,9 @@ namespace DAL.Repositories
         public ApplicationDataRepository(string dbSource) : base(dbSource)
         {
         }
-        public string GetApplicationPropertyByName(string propertyName)
+        public ApplicationData GetApplication()
         {
-            return _applicationData.GetApplicationPropertyByName(propertyName);
+            return _applicationData.GetApplication();
         }
         public void IncrementUserCountWithOne()
         {

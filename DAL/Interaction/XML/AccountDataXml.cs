@@ -14,7 +14,7 @@ namespace DAL.Interaction.XML
             _xmlDb = new XMLDb();
         }
 
-        public AccountData GetAccountByUserId(int userId)
+        public AccountData GetAccount(int userId)
         { 
             var accountRecord = _xmlDb.Xelement.Descendants("Account").Where(m => (int)m.Attribute("userId") == userId && (int)m.Attribute("isActive") == 1).Take(1).ElementAt(0);
 

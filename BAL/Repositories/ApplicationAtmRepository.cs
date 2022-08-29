@@ -24,12 +24,13 @@ namespace BAL.Repositories
 
         public ApplicationAtm GetApplication()
         {
+            var Application = _applicationDataRepository.GetApplication();
             return new ApplicationAtm
             {
-                AllowedUsersCount = int.Parse(_applicationDataRepository.GetApplicationPropertyByName("allowedUsersCount")),
-                ActualUsersCount = int.Parse(_applicationDataRepository.GetApplicationPropertyByName("actualUsersCount")),
-                DelayMS = int.Parse(_applicationDataRepository.GetApplicationPropertyByName("delayMS"))
+                AllowedUsersCount = Application.ActualUsersCount,
+                ActualUsersCount = Application.ActualUsersCount,
+                DelayMS = Application.DelayMS
             };
-        }
+    }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DAL.Interfaces;
 using DAL.JSONData;
+using DAL.Entities;
 
 namespace DAL.Interaction.JSON
 {
@@ -12,19 +13,29 @@ namespace DAL.Interaction.JSON
             _jsonDb = new JSONDb();
         }
 
-        public string GetApplicationPropertyByName(string propertyName)
+        //public string GetApplicationPropertyByName(string propertyName)
+        //{
+        //    switch (propertyName)
+        //    {
+        //        case "allowedUsersCount":
+        //            return _jsonDb.DbRoot.Application.AllowedUsersCount;
+        //        case "actualUsersCount":
+        //            return _jsonDb.DbRoot.Application.ActualUsersCount;
+        //        case "delayMS":
+        //            return _jsonDb.DbRoot.Application.DelayMS;
+        //        default:
+        //            return null;
+        //    }
+        //}
+
+        public ApplicationData GetApplication()
         {
-            switch (propertyName)
+            return new ApplicationData()
             {
-                case "allowedUsersCount":
-                    return _jsonDb.DbRoot.Application.AllowedUsersCount;
-                case "actualUsersCount":
-                    return _jsonDb.DbRoot.Application.ActualUsersCount;
-                case "delayMS":
-                    return _jsonDb.DbRoot.Application.DelayMS;
-                default:
-                    return null;
-            }
+                AllowedUsersCount = int.Parse(_jsonDb.DbRoot.Application.AllowedUsersCount),
+                ActualUsersCount = int.Parse(_jsonDb.DbRoot.Application.ActualUsersCount),
+                DelayMS = int.Parse(_jsonDb.DbRoot.Application.DelayMS)
+            };
         }
 
         public void IncrementUserCountWithOne()

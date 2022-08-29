@@ -11,7 +11,7 @@ namespace DAL.Repositories
         }
         public AccountData GetAccountByUserId(int userId)
         {
-            return _accountData.GetAccountByUserId(userId);
+            return _accountData.GetAccount(userId);
         }
         public void SaveAccountBalance(int accountId, decimal balance)
         {
